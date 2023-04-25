@@ -106,6 +106,7 @@ public class AdminController {
     @DeleteMapping("/student/{id}")
     public String deleteStudent(@PathVariable ("id") int id){
         userService.delete(id);
+        studentService.delete(id);
         return "redirect:/admin/showStudents";
 
         /*User user = userService.findById(id);

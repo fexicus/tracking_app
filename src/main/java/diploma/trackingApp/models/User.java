@@ -33,22 +33,22 @@ public class User {
     @CollectionTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
+    //@Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private Set<Role> roles;
 
     @OneToMany
     @JoinColumn(name = "admUser")
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
+    //@Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private List<Admin> admins;
 
     @OneToMany
     @JoinColumn(name = "studUser")
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
+   // @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private List<Student> students;
 
     @OneToMany
     @JoinColumn(name = "workUser")
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
+    //@Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private List<Worker> workers;
 
     public User(){}
