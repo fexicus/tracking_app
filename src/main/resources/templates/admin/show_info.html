@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ADMIN</title>
+</head>
+<body>
+<p th:text="${'ID администратора: ' + admin.getId()}">VALUE</p>
+<p th:text="${'Имя администратора: ' + admin.getUsername()}">VALUE</p>
+<p th:text="${'E-mail администратора: ' + admin.getEmail()}">VALUE</p>
+<p th:text="${'Пароль администратора: ' + admin.getPassword()}">VALUE</p>
+
+</body>
+</html>

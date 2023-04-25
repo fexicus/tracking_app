@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Info</title>
+</head>
+<body>
+<p th:text="${'Фамилия студента: ' + student.getName()}"></p>
+<p th:text="${'Имя студента: ' + student.getSurname()}"></p>
+<p th:text="${'Отчество студента (при наличии): ' + student.getPatronymic()}"></p>
+<p th:text="${'Номер группы студента: ' + student.getNameOfGroup()}"></p>
+<p th:text="${'Номер курса студента: ' + student.getCourse()}"></p>
+
+<a href="/admin/main">Вернуться на главную</a>
+</body>
+</html>

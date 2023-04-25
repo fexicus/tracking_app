@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:method="PATCH" th:action="@{/admin/task/{id}(id=${task.getId()})}" th:object="${task}">
+    <input type="hidden" th:field="*{startTask}" id="startTask"/>
+    <label for="title">Введите название задачи: </label>
+    <input type="text" th:field="*{title}" id="title"/>
+    <div style="color:red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title ERROR</div>
+    <br/>
+    <label for="fullText">Введите текст задачи: </label>
+    <input type="text" th:field="*{fullText}" id="fullText"/>
+    <div style="color:red" th:if="${#fields.hasErrors('fullText')}" th:errors="*{fullText}">fullText ERROR</div>
+    <label for="endTask">Введите завершение задачи: </label>
+    <input type="text" th:field="*{endTask}" id="endTask"/>
+    <div style="color:red" th:if="${#fields.hasErrors('endTask')}" th:errors="*{endTask}">endTask ERROR</div>
+    <br/>
+    <input type="submit" value="Обновить"/>
+</form>
+</body>
+</html>

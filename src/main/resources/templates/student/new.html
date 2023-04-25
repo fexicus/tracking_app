@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Student</title>
+</head>
+<body>
+<h1>New Student</h1>
+<form th:method="POST" th:action="@{/admin/showStudents}">
+    <!-- User Section -->
+    <h2>User Information</h2>
+    <label for="email">Email:</label>
+    <input type="text" th:field="*{user.email}" id="email"/>
+    <div th:if="${#fields.hasErrors('user.email')}" th:errors="*{user.email}"></div>
+
+    <label for="password">Password:</label>
+    <input type="password" th:field="*{user.password}" id="password"/>
+    <div th:if="${#fields.hasErrors('user.password')}" th:errors="*{user.password}"></div>
+
+    <!-- Student Section -->
+    <h2>Student Information</h2>
+    <label for="name">Name:</label>
+    <input type="text" th:field="*{student.name}" id="name"/>
+    <div th:if="${#fields.hasErrors('student.name')}" th:errors="*{student.name}"></div>
+
+    <label for="surname">Surname:</label>
+    <input type="text" th:field="*{student.surname}" id="surname"/>
+    <div th:if="${#fields.hasErrors('student.surname')}" th:errors="*{student.surname}"></div>
+
+    <label for="patronymic">Patronymic:</label>
+    <input type="text" th:field="*{student.patronymic}" id="patronymic"/>
+    <div th:if="${#fields.hasErrors('student.patronymic')}" th:errors="*{student.patronymic}"></div>
+
+    <label for="nameOfGroup">Group Name:</label>
+    <input type="text" th:field="*{student.nameOfGroup}" id="nameOfGroup"/>
+    <div th:if="${#fields.hasErrors('student.nameOfGroup')}" th:errors="*{student.nameOfGroup}"></div>
+
+    <label for="course">Course:</label>
+    <input type="text" th:field="*{student.course}" id="course"/>
+    <div th:if="${#fields.hasErrors('student.course')}" th:errors="*{student.course}"></div>
+
+    <!-- Submit Button -->
+    <input type="submit" value="Create Student"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>NEW WORKER</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/admin/showWorkers}">
+
+    <h2>User Information</h2>
+    <label for="email">Email:</label>
+    <input type="text" th:field="*{user.email}" id="email"/>
+    <div th:if="${#fields.hasErrors('user.email')}" th:errors="*{user.email}"></div>
+
+    <label for="password">Password:</label>
+    <input type="password" th:field="*{user.password}" id="password"/>
+    <div th:if="${#fields.hasErrors('user.password')}" th:errors="*{user.password}"></div>
+    <label for="name">Введите имя преподавателя: </label>
+
+    <input type="text" th:field="*{worker.name}" id="name"/>
+    <div style="color:red" th:if="${#fields.hasErrors('worker.name')}" th:errors="*{worker.name}">name ERROR</div>
+    <br/>
+    <label for="surname">Введите фамилию преподавателя: </label>
+    <input type="text" th:field="*{worker.surname}" id="surname"/>
+    <div style="color:red" th:if="${#fields.hasErrors('worker.surname')}" th:errors="*{worker.surname}">surname ERROR</div>
+    <br/>
+    <label for="patronymic">Введите отчество преподавателя: </label>
+    <input type="text" th:field="*{worker.patronymic}" id="patronymic"/>
+    <div style="color:red" th:if="${#fields.hasErrors('worker.patronymic')}" th:errors="*{worker.patronymic}">patronymic ERROR</div>
+    <br/>
+    <label for="subject">Введите предмет преподавателя: </label>
+    <input type="text" th:field="*{worker.subject}" id="subject"/>
+    <div style="color:red" th:if="${#fields.hasErrors('worker.subject')}" th:errors="*{worker.subject}">subject ERROR</div>
+    <br/>
+    <input type="submit" value="Завершить"/>
+</form>
+
+</body>
+</html>

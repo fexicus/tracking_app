@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List of students</title>
+</head>
+<body>
+<!--<form th:method="GET" th:action="@{/admin/showStudents}">
+    <label for="course">Номер курса:</label>
+    <select id="course" name="course">
+        <option value="">Выберите номер курса</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <input type="submit" value="Показать">
+</form>-->
+<div th:each="student : ${students}">
+    <a th:href="@{/admin/student/{id}(id=${student.getId()})}"
+       th:text="${student.getId() + ' - ' + student.getName() + ' ' + student.getSurname() + ' ' + student.getPatronymic()+ ', ' + student.getNameOfGroup()}">123</a>
+    <form th:method="GET" th:action="@{/admin/student/{id}/edit(id=${student.getId()})}">
+        <input type="submit" value="Редактировать"/>
+    </form>
+
+    <form th:method="DELETE" th:action="@{/admin/student/{id}(id=${student.getId()})}">
+        <input type="submit" value="Удалить"/>
+    </form>
+</div>
+
+<a href="/admin/student/new">Добавить студента</a>
+<a href="/admin/main">Вернуться на главную</a>
+</body>
+</html>
