@@ -44,6 +44,8 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
+    @Transactional
+
     public List<Student> findStudentsByCourse(String course){
         return studentRepository.findByCourse(course);
     }

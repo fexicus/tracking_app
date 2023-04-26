@@ -84,6 +84,7 @@ public class AdminController {
         //if(bindingResult.hasErrors())
           //  return "student/new";
         userService.saveForStudent(user);
+        student.setStudUser(user);
         studentService.save(student);
         return "redirect:/admin/showStudents";
     }
@@ -104,21 +105,15 @@ public class AdminController {
 
     //DELETE-метод удаления студентов из базы данных и из приложения в целом
     @DeleteMapping("/student/{id}")
-    public String deleteStudent(@PathVariable ("id") int id){
-        userService.delete(id);
-        studentService.delete(id);
-        return "redirect:/admin/showStudents";
+    public String deleteStudent(@PathVariable ("id") int id) {
+        Student student = studentService.findOne(id);
+        User user = student.getStudUser();
+        int userId = user.getId();
 
-        /*User user = userService.findById(id);
-        if (user == null) {
-            return "redirect:/admin/showStudents";
-        }
-        List<Student> students = studentService.findByUser(user);
-        for (Student student : students) {
-            studentService.delete(student.getId());
-        }
-        userService.delete(id);
-        return "redirect:/admin/showStudents";*/
+        studentService.delete(id);
+        userService.delete(userId);
+
+        return "redirect:/admin/showStudents";
     }
     //--------------------------------П Р Е П О Д А В А Т Е Л И------------------------------------------
     @GetMapping("/showWorkers")
@@ -148,6 +143,7 @@ public class AdminController {
         //if(bindingResult.hasErrors())
         // return "admin/student_new";
         userService.saveForWorker(user);
+        worker.setWorkUser(user);
         workerService.save(worker);
         return "redirect:/admin/showWorkers";
     }
@@ -170,10 +166,16 @@ public class AdminController {
     //DELETE-метод удаления студентов из базы данных и вообще
     @DeleteMapping("/worker/{id}")
     public String deleteWorker(@PathVariable ("id") int id){
+        //workerService.delete(id);
+        //userService.delete(worker.getId());
+        Worker worker = workerService.findOne(id);
+        User user = worker.getWorkUser();
+        int userId = user.getId();
+
         workerService.delete(id);
+        userService.delete(userId);
+
         return "redirect:/admin/showWorkers";
-
-
     }
     //----------------------------------------З А Д А Ч И--------------------------------------------------
     @GetMapping("/task/{id}")
