@@ -2,6 +2,7 @@ package diploma.trackingApp.controllers;
 
 import diploma.trackingApp.models.User;
 import diploma.trackingApp.services.security.RegistrationService;
+import diploma.trackingApp.util.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -18,9 +19,12 @@ public class AuthController {
 
     private final RegistrationService registrationService;
 
+    private final UserValidator userValidator;
+
     @Autowired
-    public AuthController(RegistrationService registrationService) {
+    public AuthController(RegistrationService registrationService, UserValidator userValidator) {
         this.registrationService = registrationService;
+        this.userValidator = userValidator;
     }
 
     @GetMapping("/login")
@@ -37,13 +41,12 @@ public class AuthController {
     public String performRegistration(@ModelAttribute ("user") @Valid User user,
                                       BindingResult bindingResult){
 
-        //adminValidator.validate(user, bindingResult);
+        userValidator.validate(user, bindingResult);
 
-        //if(bindingResult.hasErrors())
-        //return "/auth/registration";
+        if(bindingResult.hasErrors())
+            return "/auth/registration";
 
         registrationService.register(user);
-
         return "redirect:/auth/login";
     }
 }

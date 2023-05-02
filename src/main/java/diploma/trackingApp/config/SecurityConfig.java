@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             return;
                         }
                     }
-                    // если не удалось определить роль пользователя, перенаправляем на дефолтную страницу
+                    // если не удалось определить роль пользователя, перенаправляем на начальную страницу
                     response.sendRedirect("/");
                 })
                 .failureUrl("/auth/login?error")

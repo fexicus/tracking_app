@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "Task")
@@ -33,6 +34,12 @@ public class Task {
     @Column(name = "end_task")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date endTask;
+
+    @ElementCollection(targetClass = TaskStatus.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "task_taskStatus",
+            joinColumns = @JoinColumn(name = "task_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<TaskStatus> taskStatuses;
 
     public Task(){}
 

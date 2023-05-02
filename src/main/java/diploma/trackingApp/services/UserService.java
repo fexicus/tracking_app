@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -42,6 +43,14 @@ public class UserService {
 
     public User findById(int id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    public Optional<User> findByEmail(String email){
+       return  userRepository.findByEmail(email);
+    }
+
+    public Optional<User> findByPassword(String password){
+        return  userRepository.findByPassword(password);
     }
 
 }

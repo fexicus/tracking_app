@@ -26,8 +26,8 @@ public class StudentValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Student student = (Student) o;
 
-        //if(studentService.findByUsername(student.getUsername()).isPresent())
-        // errors.rejectValue("username", "", "Студент с таким именем пользователя уже занят");
+       /* if(studentService.findByEmail(student.getUsername()).isPresent())
+         errors.rejectValue("username", "", "Студент с таким именем пользователя уже занят");*/
 
     }
 }

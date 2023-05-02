@@ -6,6 +6,7 @@ import diploma.trackingApp.models.User;
 import diploma.trackingApp.models.Worker;
 import diploma.trackingApp.services.*;
 import diploma.trackingApp.util.StudentValidator;
+import diploma.trackingApp.util.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,16 +26,16 @@ public class AdminController {
     private final StudentService studentService;
     private final WorkerService workerService;
     private final TaskService taskService;
-    private final StudentValidator studentValidator;
+    private final UserValidator userValidator;
 
     @Autowired
-    public AdminController(AdminService adminService, UserService userService, StudentService studentService, WorkerService workerService, TaskService taskService, StudentValidator studentValidator) {
+    public AdminController(AdminService adminService, UserService userService, StudentService studentService, WorkerService workerService, TaskService taskService, UserValidator userValidator) {
         this.adminService = adminService;
         this.userService = userService;
         this.studentService = studentService;
         this.workerService = workerService;
         this.taskService = taskService;
-        this.studentValidator = studentValidator;
+        this.userValidator = userValidator;
     }
 
     //вывод главной страницы для администратора
@@ -80,13 +81,13 @@ public class AdminController {
     public String createStudent(@ModelAttribute("student") @Valid Student student,
                                 @ModelAttribute("user") User user,
                                 BindingResult bindingResult){
-        //studentValidator.validate(student, bindingResult);
-        //if(bindingResult.hasErrors())
-          //  return "student/new";
+        userValidator.validate(user, bindingResult);
+        if(bindingResult.hasErrors())
+            return "student/new";
         userService.saveForStudent(user);
         student.setStudUser(user);
         studentService.save(student);
-        return "redirect:/admin/showStudents";
+            return "redirect:/admin/showStudents";
     }
 
     //GET-метод просматривания страницы изменения информации у студента
@@ -109,13 +110,12 @@ public class AdminController {
         Student student = studentService.findOne(id);
         User user = student.getStudUser();
         int userId = user.getId();
-
         studentService.delete(id);
         userService.delete(userId);
-
         return "redirect:/admin/showStudents";
     }
     //--------------------------------П Р Е П О Д А В А Т Е Л И------------------------------------------
+    //показ всех преподавателей в вузе - необходимо сделать выпадающий список для групп и т.д.
     @GetMapping("/showWorkers")
     public String showWorkers(Model model){
         model.addAttribute("workers", workerService.findAll());
@@ -129,33 +129,33 @@ public class AdminController {
         return "worker/show_one";
     }
 
-    //добавление нового студента в список всех студентов
+    //добавление нового преподавателя в список всех преподавателей
     @GetMapping("/worker/new")
     public String newWorker(@ModelAttribute("worker") Worker worker, @ModelAttribute("user") User user){
         return "worker/new";
     }
 
-    //POST-метод для внесения информации о новом студенте
+    //POST-метод для внесения информации о новом преподавателей
     @PostMapping("/showWorkers")
     public String createWorker(@ModelAttribute("worker") @Valid Worker worker,
-                               @ModelAttribute("user") User user){
-        //studentValidator.validate(student, bindingResult);
-        //if(bindingResult.hasErrors())
-        // return "admin/student_new";
+                               @ModelAttribute("user") User user, BindingResult bindingResult){
+        userValidator.validate(user, bindingResult);
+        if(bindingResult.hasErrors())
+            return "worker/new";
         userService.saveForWorker(user);
         worker.setWorkUser(user);
         workerService.save(worker);
-        return "redirect:/admin/showWorkers";
+            return "redirect:/admin/showWorkers";
     }
 
-    //GET-метод просматривания страницы изменения информации у студента
+    //GET-метод просматривания страницы изменения информации у преподавателя
     @GetMapping("worker/{id}/edit")
     public String editWorker(@PathVariable("id") int id, Model model){
         model.addAttribute("worker", workerService.findOne(id));
         return "worker/edit";
     }
 
-    //PATCH-метод изменения информации о каждом с студенте
+    //PATCH-метод изменения информации о каждом преподавателе
     @PatchMapping("worker/{id}")
     public String updateWorker(@ModelAttribute("worker") @Valid Worker worker,
                                @PathVariable("id") int id){
@@ -163,11 +163,9 @@ public class AdminController {
         return "redirect:/admin/showWorkers";
     }
 
-    //DELETE-метод удаления студентов из базы данных и вообще
+    //DELETE-метод удаления преподавателей из базы данных и вообще
     @DeleteMapping("/worker/{id}")
     public String deleteWorker(@PathVariable ("id") int id){
-        //workerService.delete(id);
-        //userService.delete(worker.getId());
         Worker worker = workerService.findOne(id);
         User user = worker.getWorkUser();
         int userId = user.getId();
@@ -178,19 +176,20 @@ public class AdminController {
         return "redirect:/admin/showWorkers";
     }
     //----------------------------------------З А Д А Ч И--------------------------------------------------
+    //показ всех задач в вузе - необходимо сделать выпадающий список для кого ориентированы, поиск по названию и т.д.
     @GetMapping("/task/{id}")
     public String showOneTask(@PathVariable("id") int id, Model model){
         model.addAttribute("task", taskService.findOne(id));
         return "task/show_one";
     }
 
-    //добавление нового студента в список всех студентов
+    //добавление новой задачи в список всех задач
     @GetMapping("/task/new")
     public String newTask(@ModelAttribute("task") Task task){
         return "task/new";
     }
 
-    //POST-метод для внесения информации о новом студенте
+    //POST-метод для внесения информации о новой задаче
     @PostMapping("/main")
     public String createTask(@ModelAttribute("task") @Valid Task task){
         //studentValidator.validate(student, bindingResult);
@@ -201,14 +200,14 @@ public class AdminController {
         return "redirect:/admin/main";
     }
 
-    //GET-метод просматривания страницы изменения информации у студента
+    //GET-метод просматривания страницы изменения информации у задачи
     @GetMapping("task/{id}/edit")
     public String editTask(@PathVariable("id") int id, Model model){
         model.addAttribute("task", taskService.findOne(id));
         return "task/edit";
     }
 
-    //PATCH-метод изменения информации о каждом с студенте
+    //PATCH-метод изменения информации о каждой с задаче
     @PatchMapping("task/{id}")
     public String updateTask(@ModelAttribute("task") @Valid Task task,
                              @PathVariable("id") int id){
@@ -216,7 +215,7 @@ public class AdminController {
         return "redirect:/admin/main";
     }
 
-    //DELETE-метод удаления студентов из базы данных и вообще
+    //DELETE-метод удаления задач из базы данных и вообще ото всюду
     @DeleteMapping("/task/{id}")
     public String deleteTask(@PathVariable ("id") int id){
         taskService.delete(id);
