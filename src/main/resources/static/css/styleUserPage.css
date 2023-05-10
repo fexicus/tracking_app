@@ -1,0 +1,185 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    padding: 3px;
+    color: #fff;
+    background-color: #343a40;
+    width: 280px;
+    height: 745px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+    margin-right: auto;
+    text-decoration: none;
+    color: #fff;
+}
+
+.logo-icon {
+    margin-right: 2px;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: auto;
+}
+
+.nav-item {
+    margin-bottom: 10px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    text-decoration: none;
+}
+
+.nav-icon {
+    margin: 0 10px; /* например, задает отступы слева и справа в 10 пикселей */
+}
+
+        /* Стили для рамки */
+    .frame {
+        width: 280px;
+        height: 745px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+    }
+
+/* Стили для заголовка */
+.frame .title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.frame .title svg {
+    width: 40px;
+    height: 32px;
+}
+
+.frame .title .fs-4 {
+    font-size: 1.5rem;
+    margin-left: 5px;
+}
+
+/* Стили для навигации */
+.frame .nav {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.frame .nav .nav-item {
+    margin-bottom: 10px;
+}
+
+.frame .nav .nav-link {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-weight: 600;
+}
+
+.frame .nav .nav-link.active {
+    color: #212529;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.frame .nav .nav-link.active svg {
+    fill: #212529;
+}
+
+.frame .nav .nav-link svg {
+    width: 16px;
+    height: 16px;
+    fill: #fff;
+    margin-right: 5px;
+}
+
+/* Стили для кнопки выхода */
+.frame form {
+    margin-top: auto;
+}
+
+.frame form input[type="submit"] {
+    display: block;
+    width: 100%;
+    background-color: #fff;
+    color: #212529;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.frame form input[type="submit"]:hover {
+    background-color: #eee;
+}
+
+/* Стили для профиля администратора */
+.frame .dropdown {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.frame .dropdown img {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.frame .dropdown strong {
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.sidebar {
+    position: relative;
+}
+
+.dropdown {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.dropdown form {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.dropdown input[type="submit"] {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+    transition: all 0.3s ease-in-out;
+}
+
+.dropdown input[type="submit"]:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}

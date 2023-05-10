@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>SHOW WORKER</title>
+</head>
+<body>
+<p th:text="${'Имя преподавателя: ' + worker.getName()}"></p>
+<p th:text="${'Фамилия преподавателя: ' + worker.getSurname()}"></p>
+<p th:text="${'Отчество преподавателя (при наличии): ' + worker.getPatronymic()}"></p>
+<p th:text="${'Предмет, который ведет: ' + worker.getSubject()}"></p>
+
+
+<a href="/worker/main">Вернуться на главную</a>
+</body>
+</html>
