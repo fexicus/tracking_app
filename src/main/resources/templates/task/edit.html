@@ -15,6 +15,7 @@
     <input type="text" th:field="*{fullText}" id="fullText"/>
     <div style="color:red" th:if="${#fields.hasErrors('fullText')}" th:errors="*{fullText}">fullText ERROR</div>
     <label for="endTask">Введите завершение задачи: </label>
+    <br/>
     <input type="text" th:field="*{endTask}" id="endTask"/>
     <div style="color:red" th:if="${#fields.hasErrors('endTask')}" th:errors="*{endTask}">endTask ERROR</div>
     <br/>

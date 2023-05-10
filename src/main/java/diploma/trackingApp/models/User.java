@@ -6,6 +6,7 @@ import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -35,17 +36,15 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    @OneToMany
+    @OneToOne
     @JoinColumn(name = "admUser")
-    private List<Admin> admins;
+    private Admin admin;
 
-    @OneToMany
-    @JoinColumn(name = "studUser")
-    private List<Student> students;
+    @OneToOne(mappedBy = "studUser")
+    private Student student;
 
-    @OneToMany
-    @JoinColumn(name = "workUser")
-    private List<Worker> workers;
+    @OneToOne(mappedBy = "workUser")
+    private Worker worker;
 
     public User(){}
 
@@ -53,6 +52,15 @@ public class User {
         this.id = id;
         this.email = email;
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", student=" + student +
+                '}';
     }
 
 }

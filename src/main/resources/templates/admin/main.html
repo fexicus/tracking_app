@@ -2,75 +2,135 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+        crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css" th:href="@{/css/styleUserPage.css}"/>
+ <link rel="stylesheet" type="text/css" media="all" href="/css/main.css" th:href="@{/css/main.css}" />
+  <link rel="stylesheet" type="text/css" media="all" href="/css/drop.css" th:href="@{/css/drop.css}" />
+
   <meta charset="UTF-8">
   <title>ADMIN</title>
 </head>
 <body>
-<div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px; height: 745px;">
-  <a href="/admin/main" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-    <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-    <span class="fs-4">TRACK APP</span>
-  </a>
-  <hr>
-  <ul class="nav nav-pills flex-column mb-auto">
-    <li class="nav-item">
-      <a href="/admin/main" class="nav-link active" aria-current="page">
-        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="/admin/main"></use></svg>
-        Главная
-      </a>
-    </li>
-    <li>
-      <a href="/admin/showStudents" class="nav-link text-white">
-        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="/admin/showStudents"></use></svg>
-        Студенты
-      </a>
-    </li>
-    <li>
-      <a href="/admin/showWorkers" class="nav-link text-white">
-        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="/admin/showWorkers"></use></svg>
-        Работники
-      </a>
-    </li>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar">
+          <a href="/admin/main" class="logo" style="display: flex; align-items: center;">
+            <img src="/images/logo.png" alt="Your photo" class="logo-icon" width="50" height="50" style="margin-right: 10px;">
+            <span class="logo-text" style="font-family: Arial, sans-serif; font-size: 28px;">Track MAI</span>
+          </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="/admin/main" class="nav-link active" aria-current="page">
+              <svg class="bi pe-none nav-icon" width="16" height="16">
+                <use xlink:href="/admin/main"></use>
+              </svg>
+              <span class="nav-text">Главная</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/showStudents" class="nav-link text-white">
+              <svg class="bi pe-none nav-icon" width="16" height="16">
+                <use xlink:href="/admin/showStudents"></use>
+              </svg>
+              <span class="nav-text">Студенты</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/showWorkers" class="nav-link text-white">
+              <svg class="bi pe-none nav-icon" width="16" height="16">
+                <use xlink:href="/admin/showWorkers"></use>
+              </svg>
+              <span class="nav-text">Работники</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/task/newForStudent" class="nav-link text-white">
+              <svg class="bi pe-none nav-icon" width="16" height="16">
+                <use xlink:href="/admin/task/newForStudent"></use>
+              </svg>
+              <span class="nav-text">Задача для студентов</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/task/newForWorker" class="nav-link text-white">
+              <svg class="bi pe-none nav-icon" width="16" height="16">
+                <use xlink:href="/admin/task/newForWorker"></use>
+              </svg>
+              <span class="nav-text">Задача для работников</span>
+            </a>
+          </li>
+        </ul>
+        <hr>
+        <br>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="dropdown">
+            <img src="/images/admin.jpg" alt=" " width="32" height="32" class="rounded-circle avatar">
+            <strong class="username" style="margin-left: 10px;">Admin</strong>
+            <form th:action="@{/logout}" th:method="POST" style="margin-left: 90px;">
+              <button class="btn btn-primary" type="submit">Выйти</button>
+            </form>
+          </div>
+        </div>
+        <br>
+      </div>
+    </div>
 
-    <li>
-      <a href="/admin/task/new" class="nav-link text-white">
-        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="/admin/task/new"></use></svg>
-        Создать новую задачу
-      </a>
-    </li>
-
-
-    <form th:action="@{/logout}" th:method="POST">
-      <input type="submit" value="Logout">
-    </form>
-  </ul>
-  <hr>
-  <div class="dropdown">
-    <img src="https://yandex.ru/images/search?from=tabbar&img_url=http%3A%2F%2Fi.ya-wd.com%2Fimages%2Fblack-and-white-human-png-1.png&lr=213&p=2&pos=2&rpt=simage&text=%D0%B8%D0%BA%D0%BE%D0%BD%D0%BA%D0%B0%20%D0%B4%D0%BB%D1%8F%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0%20%D1%87%D0%B5%D0%BB%D0%BE%D0%B2%D0%B5%D0%BA%D0%B0"
-         alt="" width="32" height="32" class="rounded-circle me-2">
-    <strong>Administrator</strong>
-    </a>
+    <div class="col-md order-md-2">
+      <div class="album py-5 bg-body-tertiary">
+        <div class="container">
+          <form action="/admin/main" method="get" class="mb-3">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="input-group">
+                  <label for="title" class="form-label visually-hidden">Поиск по названию задачи:</label>
+                  <input type="text" class="form-control" id="title" name="title">
+                  <button type="submit" class="btn btn-primary">Поиск</button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <!-- Если задач не найдено -->
+            <div th:if="${#lists.isEmpty(tasks)}">
+              <h4>Такой задачи не существует</h4>
+              <a th:href="@{/admin/main}" class="btn btn-primary">Вернуться к списку задач</a>
+            </div>
+            <!-- Если задачи найдены -->
+            <div th:each="task : ${tasks}" class="col">
+              <form>
+                <div class="card shadow-sm">
+                  <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                       xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                       preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <title>Placeholder</title>
+                    <rect width="100%" height="100%" fill="#55595c"></rect>
+                    <text x="50%" y="50%" fill="#eceeef" dy=".3em" th:text="${task.getTitle()}"></text>
+                  </svg>
+                  <div class="card-body">
+                    <p class="card-text" th:text="${task.getFullText()}"></p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="btn-group">
+                        <a th:href="@{task/{id}(id=${task.getId()})}"
+                           class="btn btn-sm btn-outline-secondary">Просмотреть</a>
+                        <a th:href="@{task/{id}/edit(id=${task.getId()})}"
+                           class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                      </div>
+                      <small class="text-body-secondary"
+                             th:text="${#dates.format(task.getEndTask(), 'dd.MM.yyyy')}"></small>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-
-
 </div>
-
-<div class="text-center" th:each="task : ${tasks}">
-  <a th:href="@{/admin/task/{id}(id=${task.getId()})}"
-     th:text="${task.getId() + ' - ' + task.getTitle() + ' ' + task.getFullText()
-       + ' ' + task.getStartTask()+ ', ' + task.getEndTask()}">123</a>
-
-  <form th:method="GET" th:action="@{/admin/task/{id}/edit(id=${task.getId()})}">
-    <input type="submit" value="Редактировать"/>
-  </form>
-
-  <form th:method="DELETE" th:action="@{/admin/task/{id}(id=${task.getId()})}">
-    <input type="submit" value="Удалить"/>
-  </form>
-</div>
-
-
-
 </body>
 </html>

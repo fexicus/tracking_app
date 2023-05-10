@@ -1,3 +1,4 @@
+<!--
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
@@ -29,4 +30,122 @@
     <input type="submit" value="Обновить"/>
 </form>
 </body>
+</html>-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+          crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css" th:href="@{/css/styleUserPage.css}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" type="text/css" media="all" href="/css/drop.css" th:href="@{/css/drop.css}" />
+
+    <meta charset="UTF-8">
+    <title>ADMIN</title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="sidebar">
+                <a href="/admin/main" class="logo" style="display: flex; align-items: center;">
+                    <img src="/images/logo.png" alt="Your photo" class="logo-icon" width="50" height="50" style="margin-right: 10px;">
+                    <span class="logo-text" style="font-family: Arial, sans-serif; font-size: 28px;">Track MAI</span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="/admin/main" class="nav-link active" aria-current="page">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/main"></use>
+                            </svg>
+                            <span class="nav-text">Главная</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/showStudents" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/showStudents"></use>
+                            </svg>
+                            <span class="nav-text">Студенты</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/showWorkers" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/showWorkers"></use>
+                            </svg>
+                            <span class="nav-text">Работники</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/task/newForStudent" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/task/newForStudent"></use>
+                            </svg>
+                            <span class="nav-text">Создать новую задачу студентам</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/task/newForWorker" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/task/newForWorker"></use>
+                            </svg>
+                            <span class="nav-text">Создать новую задачу работникам</span>
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <br>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="dropdown">
+                        <img src="/images/admin.jpg" alt=" " width="32" height="32" class="rounded-circle avatar">
+                        <strong class="username" style="margin-left: 10px;">Admin</strong>
+                        <form th:action="@{/logout}" th:method="POST" style="margin-left: 90px;">
+                            <button class="btn btn-primary" type="submit">Выйти</button>
+                        </form>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+
+        <div class="col-md order-md-2">
+            <div class="album py-5 bg-body-tertiary">
+                <form th:method="PATCH" th:action="@{/admin/student/{id}(id=${student.getId()})}" th:object="${student}">
+                    <div class="form-group">
+                        <label for="name">Введите имя студента:</label>
+                        <input type="text" class="form-control" th:field="*{name}" id="name"/>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name ERROR</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="surname">Введите фамилию:</label>
+                        <input type="text" class="form-control" th:field="*{surname}" id="surname"/>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">surname ERROR</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="patronymic">Введите отчество:</label>
+                        <input type="text" class="form-control" th:field="*{patronymic}" id="patronymic"/>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}">patronymic ERROR</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nameOfGroup">Введите номер группы:</label>
+                        <input type="text" class="form-control" th:field="*{nameOfGroup}" id="nameOfGroup"/>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('nameOfGroup')}" th:errors="*{nameOfGroup}">nameOfGroup ERROR</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="course">Введите номер курса:</label>
+                        <input type="text" class="form-control" th:field="*{course}" id="course"/>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('course')}" th:errors="*{course}">course ERROR</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Обновить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
 </html>
+

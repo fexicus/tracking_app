@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -33,7 +32,7 @@ public class Admin {
     @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 100 символов длиной")
     private String patronymic;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User admUser;
 

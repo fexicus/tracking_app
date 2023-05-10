@@ -23,6 +23,14 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
+    public List<Task> findAllWithResearch(String title) {
+        if (title != null) {
+            return taskRepository.findByTitle(title);
+        } else {
+            return taskRepository.findAll();
+        }
+    }
+
     public Task findOne(int id){
         Optional<Task> foundTask = taskRepository.findById(id);
         return foundTask.orElse(null);
@@ -30,6 +38,7 @@ public class TaskService {
 
     @Transactional
     public void save(Task task){
+
         taskRepository.save(task);
     }
 
@@ -44,5 +53,9 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
+    @Transactional
+    public List<Task> findByStudentsId(int id) {
+        return taskRepository.findByStudentsId(id);
+    }
 
 }

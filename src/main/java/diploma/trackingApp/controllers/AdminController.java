@@ -1,11 +1,7 @@
 package diploma.trackingApp.controllers;
 
-import diploma.trackingApp.models.Student;
-import diploma.trackingApp.models.Task;
-import diploma.trackingApp.models.User;
-import diploma.trackingApp.models.Worker;
+import diploma.trackingApp.models.*;
 import diploma.trackingApp.services.*;
-import diploma.trackingApp.util.StudentValidator;
 import diploma.trackingApp.util.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -40,8 +36,8 @@ public class AdminController {
 
     //вывод главной страницы для администратора
     @GetMapping("/main")
-    public String admHello(Model model){
-        model.addAttribute("tasks", taskService.findAll());
+    public String mainAdmin( @RequestParam(name = "title", required = false) String title, Model model){
+        model.addAttribute("tasks", taskService.findAllWithResearch(title));
         return "admin/main";
     }
 
@@ -56,9 +52,6 @@ public class AdminController {
     //показ всех студентов в вузе - необходимо сделать выпадающий список для курсов и т.д.
     @GetMapping("/showStudents")
     public String showStudents(Model model){
-        //List<Student> students = studentService.findStudentsByCourse(course);
-        //@RequestParam("course") String course,
-        //model.addAttribute("students", students);
         model.addAttribute("students", studentService.findAll());
         return "student/showAll";
     }
@@ -169,7 +162,6 @@ public class AdminController {
         Worker worker = workerService.findOne(id);
         User user = worker.getWorkUser();
         int userId = user.getId();
-
         workerService.delete(id);
         userService.delete(userId);
 
@@ -183,20 +175,69 @@ public class AdminController {
         return "task/show_one";
     }
 
-    //добавление новой задачи в список всех задач
-    @GetMapping("/task/new")
-    public String newTask(@ModelAttribute("task") Task task){
-        return "task/new";
+    //добавление новой задачи в список всех задач для студентов
+    @GetMapping("/task/newForStudent")
+    public String newTaskForStudents(Model model){
+        model.addAttribute("task", new Task());
+        model.addAttribute("students", studentService.findAll());
+        return "task/new_for_student";
     }
 
-    //POST-метод для внесения информации о новой задаче
+    //POST-метод для внесения новой задачи для студентов
     @PostMapping("/main")
-    public String createTask(@ModelAttribute("task") @Valid Task task){
-        //studentValidator.validate(student, bindingResult);
-        //if(bindingResult.hasErrors())
-        // return "admin/student_new";
-        task.setStartTask(new Date());
-        taskService.save(task);
+    public String createTaskForStudents(@ModelAttribute("task") Task task, @RequestParam("student") int studentId,
+                                        @RequestParam(value = "all", required = false) Boolean allStudents){
+        if (allStudents != null && allStudents) {
+            task.setTaskStatuses(Collections.singleton(TaskStatus.IN_PROGRESS));
+            task.setStartTask(new Date());
+            taskService.save(task);
+
+            List<Student> students = studentService.findAll();
+            for (Student student : students) {
+                studentService.addTask(student, task);
+            }
+        }
+        else if (studentId != 0){
+            Student student = studentService.findOne(studentId);
+            task.setStudents(Collections.singletonList(student));
+            task.setTaskStatuses(Collections.singleton(TaskStatus.IN_PROGRESS));
+            task.setStartTask(new Date());
+            taskService.save(task);
+            studentService.addTask(student, task);
+        }
+        return "redirect:/admin/main";
+    }
+
+    //добавление новой задачи в список всех задач для преподавателей
+    @GetMapping("/task/newForWorker")
+    public String newTaskForWorkers(Model model){
+        model.addAttribute("task", new Task());
+        model.addAttribute("workers", workerService.findAll());
+        return "task/new_for_worker";
+    }
+
+    //POST-метод для внесения новой задачи для преподавателей
+    @PostMapping("/")
+    public String createTaskForWorkers(@ModelAttribute("task") Task task, @RequestParam("worker") int workerId,
+                                        @RequestParam(value = "all", required = false) Boolean allWorkers){
+        if (allWorkers != null && allWorkers) {
+            task.setTaskStatuses(Collections.singleton(TaskStatus.IN_PROGRESS));
+            task.setStartTask(new Date());
+            taskService.save(task);
+
+            List<Worker> workers = workerService.findAll();
+            for (Worker worker : workers) {
+                workerService.addTask(worker, task);
+            }
+        }
+        else if (workerId != 0){
+            Worker worker = workerService.findOne(workerId);
+            task.setWorkers(Collections.singletonList(worker));
+            task.setTaskStatuses(Collections.singleton(TaskStatus.IN_PROGRESS));
+            task.setStartTask(new Date());
+            taskService.save(task);
+            workerService.addTask(worker, task);
+        }
         return "redirect:/admin/main";
     }
 

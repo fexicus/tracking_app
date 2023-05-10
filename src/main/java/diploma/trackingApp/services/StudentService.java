@@ -1,14 +1,14 @@
 package diploma.trackingApp.services;
 
 import diploma.trackingApp.models.Student;
+import diploma.trackingApp.models.Task;
 import diploma.trackingApp.models.User;
 import diploma.trackingApp.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -49,9 +49,37 @@ public class StudentService {
     public List<Student> findStudentsByCourse(String course){
         return studentRepository.findByCourse(course);
     }
-
+    @Transactional
     public List<Student> findByUser(User user) {
         return studentRepository.findByStudUser(user);
+    }
+    @Transactional
+    public List<Student> findByStudUserEmail(String email){
+        return studentRepository.findByStudUserEmail(email);
+    }
+
+    @Transactional
+    public void addTask(Student student, Task task) {
+        List<Task> tasks = student.getTasks();
+        if (tasks == null) {
+            tasks = new ArrayList<>();
+        }
+        tasks.add(task);
+    }
+
+    @Transactional
+    public void addTasks(List<Student> students, List<Task> tasks) {
+        if (students == null || tasks == null) {
+            throw new IllegalArgumentException("Students and tasks cannot be null");
+        }
+        if (students.isEmpty() || tasks.isEmpty()) {
+            throw new IllegalArgumentException("Students and tasks cannot be empty");
+        }
+        for (Student student : students) {
+            for (Task task : tasks) {
+                addTask(student, task);
+            }
+        }
     }
 
 }

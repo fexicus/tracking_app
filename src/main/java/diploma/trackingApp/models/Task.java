@@ -5,7 +5,9 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -40,6 +42,15 @@ public class Task {
             joinColumns = @JoinColumn(name = "task_id"))
     @Enumerated(EnumType.STRING)
     private Set<TaskStatus> taskStatuses;
+
+    @ManyToMany(mappedBy = "tasks")
+    private List<Student> students = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "tasksForWorkers")
+    private List<Worker> workers = new ArrayList<>();
+
+    @Transient
+    private boolean expired;//проверка на просроченность задачи
 
     public Task(){}
 

@@ -1,13 +1,14 @@
 package diploma.trackingApp.services;
 
+import diploma.trackingApp.models.Student;
+import diploma.trackingApp.models.Task;
 import diploma.trackingApp.models.Worker;
 import diploma.trackingApp.repositories.WorkerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -41,5 +42,14 @@ public class WorkerService {
     @Transactional
     public void delete(int id){
         workerRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void addTask(Worker worker, Task task) {
+        Set<Task> tasks = worker.getTasksForWorkers();
+        if (tasks == null) {
+            tasks = new HashSet<>();
+        }
+        tasks.add(task);
     }
 }
