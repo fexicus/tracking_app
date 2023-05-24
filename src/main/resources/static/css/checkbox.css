@@ -1,0 +1,29 @@
+.custom-checkbox {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    position: relative;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.custom-checkbox::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background-color: #007bff; /* Цвет тика */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.form-check-input:checked + .form-check-label .custom-checkbox::after {
+    opacity: 1;
+}
