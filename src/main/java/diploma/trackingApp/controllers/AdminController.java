@@ -8,15 +8,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+
 
 import javax.validation.Valid;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final AdminService adminService;
+    //private final AdminService adminService;
 
     private final UserService userService;
     private final StudentService studentService;
@@ -25,8 +30,7 @@ public class AdminController {
     private final UserValidator userValidator;
 
     @Autowired
-    public AdminController(AdminService adminService, UserService userService, StudentService studentService, WorkerService workerService, TaskService taskService, UserValidator userValidator) {
-        this.adminService = adminService;
+    public AdminController(UserService userService, StudentService studentService, WorkerService workerService, TaskService taskService, UserValidator userValidator) {
         this.userService = userService;
         this.studentService = studentService;
         this.workerService = workerService;
@@ -34,25 +38,68 @@ public class AdminController {
         this.userValidator = userValidator;
     }
 
-    //вывод главной страницы для администратора
+    @PostMapping("/main/updateTaskStatuses")
+    public String updateTaskStatuses() {
+        taskService.updateTaskStatuses();
+        return "redirect:/admin/main";
+    }
+
     @GetMapping("/main")
-    public String mainAdmin( @RequestParam(name = "title", required = false) String title, Model model){
-        model.addAttribute("tasks", taskService.findAllWithResearch(title));
+    public String mainAdmin(@RequestParam(name = "title", required = false) String title,
+                            @RequestParam(name = "interests", required = false) String importance,
+                            Model model) {
+        taskService.updateTaskStatuses(); // Обновление статусов перед отображением страницы
+
+        List<Task> tasks;
+
+        if (importance != null && !importance.isEmpty()) {
+            Interest selectedImportance = Interest.valueOf(importance);
+            tasks = taskService.findAllWithResearchAndImportance(title, selectedImportance);
+        } else {
+            tasks = taskService.findAllWithResearch(title);
+        }
+
+        // Фильтрация задач по статусу "IN_PROGRESS"
+        List<Task> inProgressTasks = tasks.stream()
+                .filter(task -> task.getTaskStatuses().contains(TaskStatus.IN_PROGRESS))
+                .collect(Collectors.toList());
+
+        model.addAttribute("tasks", inProgressTasks);
+        model.addAttribute("interests", Interest.values());
+
         return "admin/main";
     }
 
-    //показ информации администратора
-    @GetMapping("/showAdminInfo/{id}")
-    public String showAdminInfo(@PathVariable("id") int id, Model model){
-        model.addAttribute("admin", adminService.findOne(id));
-        return "admin/show_info";
+    @GetMapping("/completed")
+    public String showFinishedTasks(Model model){
+        taskService.updateTaskStatuses();
+
+        // Получение всех завершенных задач
+        List<Task> completedTasks = taskService.findAllCompletedTasks();
+
+        // Добавление завершенных задач в модель
+        model.addAttribute("completedTasks", completedTasks);
+
+        return "admin/completed";
     }
 
     //--------------------------------------С Т У Д Е Н Т Ы------------------------------------------------
     //показ всех студентов в вузе - необходимо сделать выпадающий список для курсов и т.д.
-    @GetMapping("/showStudents")
+    /*@GetMapping("/showStudents")
     public String showStudents(Model model){
         model.addAttribute("students", studentService.findAll());
+        return "student/showAll";
+    }*/
+
+    @GetMapping("/showStudents")
+    public String showStudents(@RequestParam(value = "course", required = false) String courseNumber, Model model) {
+        List<Student> students;
+        if (courseNumber != null && !courseNumber.isEmpty()) {
+            students = studentService.findStudentsByCourse(courseNumber);
+        } else {
+            students = studentService.findAll();
+        }
+        model.addAttribute("students", students);
         return "student/showAll";
     }
 
@@ -92,7 +139,8 @@ public class AdminController {
 
     //PATCH-метод изменения информации о каждом с студенте
     @PatchMapping("student/{id}")
-    public String updateStudent(@ModelAttribute("student") @Valid Student student, @PathVariable("id") int id){
+    public String updateStudent(@ModelAttribute("student") @Valid Student student, @PathVariable("id") int id, User user){
+        //student.getStudUser().setId(user.get().getStudent().getId());
         studentService.update(id, student);
         return "redirect:/admin/showStudents";
     }
@@ -180,15 +228,18 @@ public class AdminController {
     public String newTaskForStudents(Model model){
         model.addAttribute("task", new Task());
         model.addAttribute("students", studentService.findAll());
+        model.addAttribute("interests", Interest.values()); // Передаем список значений Enum в модель
         return "task/new_for_student";
     }
 
     //POST-метод для внесения новой задачи для студентов
     @PostMapping("/main")
     public String createTaskForStudents(@ModelAttribute("task") Task task, @RequestParam("student") int studentId,
-                                        @RequestParam(value = "all", required = false) Boolean allStudents){
+                                        @RequestParam(value = "all", required = false) Boolean allStudents,
+                                        @RequestParam("interest") Interest interest){
         if (allStudents != null && allStudents) {
             task.setTaskStatuses(Collections.singleton(TaskStatus.IN_PROGRESS));
+            task.setInterests(Collections.singleton(interest)); // Установка значения Interests в Task
             task.setStartTask(new Date());
             taskService.save(task);
 
@@ -201,6 +252,7 @@ public class AdminController {
             Student student = studentService.findOne(studentId);
             task.setStudents(Collections.singletonList(student));
             task.setTaskStatuses(Collections.singleton(TaskStatus.IN_PROGRESS));
+            task.setInterests(Collections.singleton(interest)); // Установка значения Interests в Task
             task.setStartTask(new Date());
             taskService.save(task);
             studentService.addTask(student, task);
@@ -213,15 +265,18 @@ public class AdminController {
     public String newTaskForWorkers(Model model){
         model.addAttribute("task", new Task());
         model.addAttribute("workers", workerService.findAll());
+        model.addAttribute("interests", Interest.values()); // Передаем список значений Enum в модель
         return "task/new_for_worker";
     }
 
     //POST-метод для внесения новой задачи для преподавателей
     @PostMapping("/")
     public String createTaskForWorkers(@ModelAttribute("task") Task task, @RequestParam("worker") int workerId,
-                                        @RequestParam(value = "all", required = false) Boolean allWorkers){
+                                        @RequestParam(value = "all", required = false) Boolean allWorkers,
+                                       @RequestParam("interest") Interest interest){
         if (allWorkers != null && allWorkers) {
             task.setTaskStatuses(Collections.singleton(TaskStatus.IN_PROGRESS));
+            task.setInterests(Collections.singleton(interest));
             task.setStartTask(new Date());
             taskService.save(task);
 
@@ -234,6 +289,7 @@ public class AdminController {
             Worker worker = workerService.findOne(workerId);
             task.setWorkers(Collections.singletonList(worker));
             task.setTaskStatuses(Collections.singleton(TaskStatus.IN_PROGRESS));
+            task.setInterests(Collections.singleton(interest));
             task.setStartTask(new Date());
             taskService.save(task);
             workerService.addTask(worker, task);

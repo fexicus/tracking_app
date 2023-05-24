@@ -14,10 +14,12 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class StudentService {
     private final StudentRepository studentRepository;
+    private final UserService userService;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, UserService userService) {
         this.studentRepository = studentRepository;
+        this.userService = userService;
     }
 
     public List<Student> findAll(){

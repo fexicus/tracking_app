@@ -1,11 +1,13 @@
 package diploma.trackingApp.models;
 
+import diploma.trackingApp.config.PasswordConstraint;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -21,24 +23,21 @@ public class User {
     private int id;
 
     @NotEmpty(message = "Почта не должна быть пустой")
-    //@Size(min = 2, max = 100, message = "Почта должна быть от 2 до 100 символов длиной")
-    //добавить регулярное выражение для почты(у умного чела в проекте)
+    @Pattern(regexp = "^[A-Z]{3}.*@education\\.mai$", message = "Неверно введена почта")
     @Column(name = "email")
     private String email;
 
     @NotEmpty(message = "Пароль пользователя не должен быть пустым")
+    @PasswordConstraint
     @Column(name = "password")
     private String password;
+
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-
-    @OneToOne
-    @JoinColumn(name = "admUser")
-    private Admin admin;
 
     @OneToOne(mappedBy = "studUser")
     private Student student;
@@ -52,15 +51,6 @@ public class User {
         this.id = id;
         this.email = email;
         this.password = password;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", student=" + student +
-                '}';
     }
 
 }

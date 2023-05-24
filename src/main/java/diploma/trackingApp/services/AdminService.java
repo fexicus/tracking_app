@@ -1,7 +1,6 @@
 package diploma.trackingApp.services;
 
 import diploma.trackingApp.models.Admin;
-import diploma.trackingApp.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+/*@Service
 @Transactional
 public class AdminService {
-    private final AdminRepository adminRepository;
+*//*    private final AdminRepository adminRepository;
 
     @Autowired
     public AdminService(AdminRepository adminRepository) {
@@ -26,5 +25,5 @@ public class AdminService {
     public Admin findOne(int id){
         Optional<Admin> foundAdmin = adminRepository.findById(id);
         return foundAdmin.orElse(null);
-    }
-}
+    }*//*
+}*/

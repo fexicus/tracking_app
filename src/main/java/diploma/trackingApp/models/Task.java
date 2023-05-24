@@ -49,6 +49,12 @@ public class Task {
     @ManyToMany(mappedBy = "tasksForWorkers")
     private List<Worker> workers = new ArrayList<>();
 
+    @ElementCollection(targetClass = Interest.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "task_interest",
+            joinColumns = @JoinColumn(name = "task_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Interest> interests;
+
     @Transient
     private boolean expired;//проверка на просроченность задачи
 

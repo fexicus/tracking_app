@@ -9,10 +9,10 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "Admin")
+//@Entity
+//@Table(name = "Admin")
 public class Admin {
-
+/*
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,17 +32,12 @@ public class Admin {
     @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 100 символов длиной")
     private String patronymic;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User admUser;
-
     public Admin(){}
 
-    public Admin(int id, String name, String surname, String patronymic, User admUser) {
+    public Admin(int id, String name, String surname, String patronymic) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
-        this.admUser = admUser;
-    }
+    }*/
 }
