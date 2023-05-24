@@ -1,39 +1,146 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+          crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css" th:href="@{/css/styleUserPage.css}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css" th:href="@{/css/main.css}" />
+
     <meta charset="UTF-8">
-    <title>NEW WORKER</title>
+    <title>ADMIN</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/admin/showWorkers}">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="sidebar position-fixed">
+                <a href="/admin/main" class="logo" style="display: flex; align-items: center;">
+                    <img src="/images/logo.png" alt="Your photo" class="logo-icon" width="50" height="50" style="margin-right: 10px;">
+                    <span class="logo-text" style="font-family: Arial, sans-serif; font-size: 28px;">TRACK APP</span>
+                </a>
+                <hr style="background-color: white;">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="/admin/main" class="nav-link active" aria-current="page">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/main"></use>
+                            </svg>
+                            <span class="nav-text">Главная</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/showStudents" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/showStudents"></use>
+                            </svg>
+                            <span class="nav-text">Студенты</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/showWorkers" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/showWorkers"></use>
+                            </svg>
+                            <span class="nav-text">Работники</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/task/newForStudent" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/task/newForStudent"></use>
+                            </svg>
+                            <span class="nav-text">Создать задачу студентам</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/task/newForWorker" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/task/newForWorker"></use>
+                            </svg>
+                            <span class="nav-text">Создать задачу работникам</span>
+                        </a>
+                    </li>
+                </ul>
+                <hr style="background-color: white;">
+                <br>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="dropdown">
+                        <img src="/images/admin.jpg" alt=" " width="32" height="32" class="rounded-circle avatar">
+                        <strong class="username" style="margin-left: 10px;">Admin</strong>
+                        <form th:action="@{/logout}" th:method="POST" style="margin-left: 90px;">
+                            <button class="btn btn-primary" type="submit">Выйти</button>
+                        </form>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
 
-    <h2>User Information</h2>
-    <label for="email">Email:</label>
-    <input type="text" th:field="*{user.email}" id="email"/>
-    <div th:if="${#fields.hasErrors('user.email')}" th:errors="*{user.email}"></div>
 
-    <label for="password">Password:</label>
-    <input type="password" th:field="*{user.password}" id="password"/>
-    <div th:if="${#fields.hasErrors('user.password')}" th:errors="*{user.password}"></div>
-    <label for="name">Введите имя преподавателя: </label>
-
-    <input type="text" th:field="*{worker.name}" id="name"/>
-    <div style="color:red" th:if="${#fields.hasErrors('worker.name')}" th:errors="*{worker.name}">name ERROR</div>
-    <br/>
-    <label for="surname">Введите фамилию преподавателя: </label>
-    <input type="text" th:field="*{worker.surname}" id="surname"/>
-    <div style="color:red" th:if="${#fields.hasErrors('worker.surname')}" th:errors="*{worker.surname}">surname ERROR</div>
-    <br/>
-    <label for="patronymic">Введите отчество преподавателя: </label>
-    <input type="text" th:field="*{worker.patronymic}" id="patronymic"/>
-    <div style="color:red" th:if="${#fields.hasErrors('worker.patronymic')}" th:errors="*{worker.patronymic}">patronymic ERROR</div>
-    <br/>
-    <label for="subject">Введите предмет преподавателя: </label>
-    <input type="text" th:field="*{worker.subject}" id="subject"/>
-    <div style="color:red" th:if="${#fields.hasErrors('worker.subject')}" th:errors="*{worker.subject}">subject ERROR</div>
-    <br/>
-    <input type="submit" value="Завершить"/>
-</form>
-
+        <div class="col-md order-md-2">
+            <div class="album py-5 bg-body-tertiary">
+                <div class="container">
+                    <h2>Создание работника</h2>
+                    <form class="needs-validation" novalidate=""
+                          th:method="POST"
+                          th:action="@{/admin/showWorkers}">
+                        <div class="col-md-6">
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label for="email">Email:</label>
+                                    <input type="text" class="form-control" id="email" th:field="*{user.email}" required="">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('user.email')}" th:errors="*{user.email}">
+                                        Неверный email
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="password">Пароль:</label>
+                                    <input type="password" class="form-control" id="password" th:field="*{user.password}" required="">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('user.password')}" th:errors="*{user.password}">
+                                        Неверный пароль
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label for="name" class="form-label">Введите имя студента:</label>
+                                <input type="text" class="form-control" id="name" th:field="*{worker.name}" required="">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('worker.name')}" th:errors="*{worker.name}">
+                                    Неверное имя
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="surname" class="form-label">Введите фамилию:</label>
+                                <input type="text" class="form-control" id="surname" th:field="*{worker.surname}" required="">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('worker.surname')}" th:errors="*{worker.surname}">
+                                    Неверная фамилия
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="patronymic" class="form-label">Введите отчество:</label>
+                                <input type="text" class="form-control" id="patronymic" th:field="*{worker.patronymic}" required="">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('worker.patronymic')}" th:errors="*{worker.patronymic}">
+                                    Неверное отчество
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="subject" class="form-label">Введите преподаваемый предмет:</label>
+                                <input type="text" class="form-control" id="subject" th:field="*{worker.subject}" required="">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('worker.subject')}" th:errors="*{worker.subject}">
+                                    Неверный номер группы
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                        <button class="btn btn-primary btn-lg" type="submit">Сохранить изменения</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

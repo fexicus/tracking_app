@@ -8,20 +8,21 @@
     <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css" th:href="@{/css/styleUserPage.css}"/>
     <link rel="stylesheet" type="text/css" media="all" href="/css/main.css" th:href="@{/css/main.css}" />
     <link rel="stylesheet" type="text/css" media="all" href="/css/drop.css" th:href="@{/css/drop.css}" />
+
 </head>
 <body>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3">
-            <div class="sidebar">
+            <div class="sidebar position-fixed">
                 <a href="/admin/main" class="logo" style="display: flex; align-items: center;">
                     <img src="/images/logo.png" alt="Your photo" class="logo-icon" width="50" height="50" style="margin-right: 10px;">
-                    <span class="logo-text" style="font-family: Arial, sans-serif; font-size: 28px;">Track MAI</span>
+                    <span class="logo-text" style="font-family: Arial, sans-serif; font-size: 28px;">TRACK APP</span>
                 </a>
-                <hr>
+                <hr style="background-color: white;">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="/admin/main" class="nav-link active" aria-current="page">
+                        <a href="/admin/main" class="nav-link text-white">
                             <svg class="bi pe-none nav-icon" width="16" height="16">
                                 <use xlink:href="/admin/main"></use>
                             </svg>
@@ -29,7 +30,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/admin/showStudents" class="nav-link text-white">
+                        <a href="/admin/showStudents" class="nav-link active" aria-current="page">
                             <svg class="bi pe-none nav-icon" width="16" height="16">
                                 <use xlink:href="/admin/showStudents"></use>
                             </svg>
@@ -49,7 +50,7 @@
                             <svg class="bi pe-none nav-icon" width="16" height="16">
                                 <use xlink:href="/admin/task/newForStudent"></use>
                             </svg>
-                            <span class="nav-text">Создать новую задачу студентам</span>
+                            <span class="nav-text">Создать задачу студентам</span>
                         </a>
                     </li>
                     <li>
@@ -57,11 +58,11 @@
                             <svg class="bi pe-none nav-icon" width="16" height="16">
                                 <use xlink:href="/admin/task/newForWorker"></use>
                             </svg>
-                            <span class="nav-text">Создать новую задачу работникам</span>
+                            <span class="nav-text">Создать задачу работникам</span>
                         </a>
                     </li>
                 </ul>
-                <hr>
+                <hr style="background-color: white;">
                 <br>
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="dropdown">
@@ -80,7 +81,7 @@
             <div class="album py-5 bg-body-tertiary">
                 <div class="container">
                     <h1>Список студентов</h1>
-                    <form th:method="GET" th:action="@{/admin/showStudents}">
+                    <form id="filterForm">
                         <div class="form-group">
                             <label for="course">Номер курса:</label>
                             <select id="course" name="course" class="form-control">
@@ -92,8 +93,8 @@
                                 <option value="5">5</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary mt-2">Показать</button>
                     </form>
+
                     <table class="table table-striped table-bordered mt-4">
                         <thead>
                         <tr>
@@ -140,63 +141,29 @@
         </div>
     </div>
 </div>
-<!--
-<div class="container">
-    <h1>List of students</h1>
-    <form th:method="GET" th:action="@{/admin/showStudents}">
-        <div class="form-group">
-            <label for="course">Номер курса:</label>
-            <select id="course" name="course" class="form-control">
-                <option value="">Выберите номер курса</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Показать</button>
-    </form>
-    <table class="table table-striped table-bordered">
-        <thead>
-        <tr>
-            <th>Номер</th>
-            <th>Имя</th>
-            <th>Фамилия</th>
-            <th>Отчество</th>
-            <th>Группа</th>
-            <th>Действия</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="student : ${students}">
-            <td th:text="${student.getId()}"></td>
-            <td th:text="${student.getName()}"></td>
-            <td th:text="${student.getSurname()}"></td>
-            <td th:text="${student.getPatronymic()}"></td>
-            <td th:text="${student.getNameOfGroup()}"></td>
-            <td>
-                <div class="btn-group">
-                    <form th:method="GET" th:action="@{/admin/student/{id}/edit(id=${student.getId()})}">
-                        <button type="submit" class="btn btn-secondary">Редактировать</button>
-                    </form>
-                    <form th:method="DELETE" th:action="@{/admin/student/{id}(id=${student.getId()})}">
-                        <button type="submit" class="btn btn-danger">Удалить</button>
-                    </form>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div class="row">
-        <div class="col-md-6">
-            <a href="/admin/student/new" class="btn btn-primary">Добавить студента</a>
-        </div>
-        <div class="col-md-6 text-right">
-            <a href="/admin/main" class="btn btn-primary">Вернуться на главную</a>
-        </div>
-    </div>
-</div>
--->
+
+<script>
+    var courseSelect = document.getElementById('course');
+    courseSelect.addEventListener('change', function () {
+        var selectedCourse = courseSelect.value;
+        var url = '/admin/showStudents?course=' + encodeURIComponent(selectedCourse);
+        window.location.href = url;
+    });
+
+    // Загружаем студентов для выбранного курса при загрузке страницы
+    var selectedCourse = courseSelect.value;
+    if (selectedCourse) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/admin/showStudents?course=' + selectedCourse);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var studentsContainer = document.getElementById('studentsContainer');
+                studentsContainer.innerHTML = xhr.responseText;
+            }
+        };
+        xhr.send();
+    }
+</script>
+
 </body>
 </html>

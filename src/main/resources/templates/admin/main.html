@@ -2,135 +2,205 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-        crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css" th:href="@{/css/styleUserPage.css}"/>
- <link rel="stylesheet" type="text/css" media="all" href="/css/main.css" th:href="@{/css/main.css}" />
-  <link rel="stylesheet" type="text/css" media="all" href="/css/drop.css" th:href="@{/css/drop.css}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+          crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css"
+          th:href="@{/css/styleUserPage.css}"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" media="all" href="/css/main.css" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="/css/drop.css" th:href="@{/css/drop.css}"/>
 
-  <meta charset="UTF-8">
-  <title>ADMIN</title>
+    <meta charset="UTF-8">
+    <title>ADMIN</title>
 </head>
 <body>
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="sidebar">
-          <a href="/admin/main" class="logo" style="display: flex; align-items: center;">
-            <img src="/images/logo.png" alt="Your photo" class="logo-icon" width="50" height="50" style="margin-right: 10px;">
-            <span class="logo-text" style="font-family: Arial, sans-serif; font-size: 28px;">Track MAI</span>
-          </a>
-        <hr>
-        <ul class="nav nav-pills flex-column mb-auto">
-          <li class="nav-item">
-            <a href="/admin/main" class="nav-link active" aria-current="page">
-              <svg class="bi pe-none nav-icon" width="16" height="16">
-                <use xlink:href="/admin/main"></use>
-              </svg>
-              <span class="nav-text">Главная</span>
-            </a>
-          </li>
-          <li>
-            <a href="/admin/showStudents" class="nav-link text-white">
-              <svg class="bi pe-none nav-icon" width="16" height="16">
-                <use xlink:href="/admin/showStudents"></use>
-              </svg>
-              <span class="nav-text">Студенты</span>
-            </a>
-          </li>
-          <li>
-            <a href="/admin/showWorkers" class="nav-link text-white">
-              <svg class="bi pe-none nav-icon" width="16" height="16">
-                <use xlink:href="/admin/showWorkers"></use>
-              </svg>
-              <span class="nav-text">Работники</span>
-            </a>
-          </li>
-          <li>
-            <a href="/admin/task/newForStudent" class="nav-link text-white">
-              <svg class="bi pe-none nav-icon" width="16" height="16">
-                <use xlink:href="/admin/task/newForStudent"></use>
-              </svg>
-              <span class="nav-text">Задача для студентов</span>
-            </a>
-          </li>
-          <li>
-            <a href="/admin/task/newForWorker" class="nav-link text-white">
-              <svg class="bi pe-none nav-icon" width="16" height="16">
-                <use xlink:href="/admin/task/newForWorker"></use>
-              </svg>
-              <span class="nav-text">Задача для работников</span>
-            </a>
-          </li>
-        </ul>
-        <hr>
-        <br>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="dropdown">
-            <img src="/images/admin.jpg" alt=" " width="32" height="32" class="rounded-circle avatar">
-            <strong class="username" style="margin-left: 10px;">Admin</strong>
-            <form th:action="@{/logout}" th:method="POST" style="margin-left: 90px;">
-              <button class="btn btn-primary" type="submit">Выйти</button>
-            </form>
-          </div>
-        </div>
-        <br>
-      </div>
-    </div>
-
-    <div class="col-md order-md-2">
-      <div class="album py-5 bg-body-tertiary">
-        <div class="container">
-          <form action="/admin/main" method="get" class="mb-3">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="input-group">
-                  <label for="title" class="form-label visually-hidden">Поиск по названию задачи:</label>
-                  <input type="text" class="form-control" id="title" name="title">
-                  <button type="submit" class="btn btn-primary">Поиск</button>
-                </div>
-              </div>
-            </div>
-          </form>
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <!-- Если задач не найдено -->
-            <div th:if="${#lists.isEmpty(tasks)}">
-              <h4>Такой задачи не существует</h4>
-              <a th:href="@{/admin/main}" class="btn btn-primary">Вернуться к списку задач</a>
-            </div>
-            <!-- Если задачи найдены -->
-            <div th:each="task : ${tasks}" class="col">
-              <form>
-                <div class="card shadow-sm">
-                  <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                       xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                       preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#55595c"></rect>
-                    <text x="50%" y="50%" fill="#eceeef" dy=".3em" th:text="${task.getTitle()}"></text>
-                  </svg>
-                  <div class="card-body">
-                    <p class="card-text" th:text="${task.getFullText()}"></p>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div class="btn-group">
-                        <a th:href="@{task/{id}(id=${task.getId()})}"
-                           class="btn btn-sm btn-outline-secondary">Просмотреть</a>
-                        <a th:href="@{task/{id}/edit(id=${task.getId()})}"
-                           class="btn btn-sm btn-outline-secondary">Редактировать</a>
-                      </div>
-                      <small class="text-body-secondary"
-                             th:text="${#dates.format(task.getEndTask(), 'dd.MM.yyyy')}"></small>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="sidebar position-fixed">
+                <a href="/admin/main" class="logo" style="display: flex; align-items: center;">
+                    <img src="/images/logo.png" alt="Your photo" class="logo-icon" width="50" height="50"
+                         style="margin-right: 10px;">
+                    <span class="logo-text" style="font-family: Arial, sans-serif; font-size: 28px;">TRACK APP</span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="/admin/main" class="nav-link active" aria-current="page">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/main"></use>
+                            </svg>
+                            <span class="nav-text">Главная</span>
+                        </a>
+                    </li>
+                    <li >
+                        <a href="/admin/showStudents" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/showStudents"></use>
+                            </svg>
+                            <span class="nav-text">Студенты</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/showWorkers" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/showWorkers"></use>
+                            </svg>
+                            <span class="nav-text">Работники</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/task/newForStudent" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/task/newForStudent"></use>
+                            </svg>
+                            <span class="nav-text">Создать задачу студентам</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/task/newForWorker" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/task/newForWorker"></use>
+                            </svg>
+                            <span class="nav-text">Создать задачу работникам</span>
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <br>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="dropdown">
+                        <img src="/images/admin.jpg" alt=" " width="32" height="32" class="rounded-circle avatar">
+                        <strong class="username" style="margin-left: 10px;">Admin</strong>
+                        <form th:action="@{/logout}" th:method="POST" style="margin-left: 90px;">
+                            <button class="btn btn-primary" type="submit">Выйти</button>
+                        </form>
                     </div>
-                  </div>
                 </div>
-              </form>
+                <br>
             </div>
-          </div>
         </div>
-      </div>
+
+
+        <div class="col-md order-md-2">
+            <div class="album py-5 bg-body-tertiary">
+                <div class="container">
+                    <div class="d-flex justify-content-end mb-3">
+                        <a href="/admin/completed" class="btn btn-sm btn-outline-primary">Завершенные</a>
+                    </div>
+                    <form action="/admin/main" method="get" class="mb-3" id="filterForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label for="title" class="form-label visually-hidden">Поиск по названию задачи:</label>
+                                    <input type="text" class="form-control" id="title" name="title">
+                                    <button type="submit" class="btn btn-primary" onclick="performSearch()">Поиск</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <select class="form-select" id="interests" name="interests">
+                                        <option value="">Все</option>
+                                        <option value="IMPORTANT">Важные</option>
+                                        <option value="MEDIUM">Средние</option>
+                                        <option value="UNIMPORTANT">Неважные</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                        <!-- Если задач не найдено -->
+                        <div th:if="${#lists.isEmpty(tasks)}">
+                            <h4>Такой задачи не существует</h4>
+                            <a th:href="@{/admin/main}" class="btn btn-primary">Вернуться к списку задач</a>
+                        </div>
+                        <!-- Если задачи найдены -->
+                        <div th:each="task : ${tasks}" class="col" th:if="${task.getTaskStatuses().contains(T(diploma.trackingApp.models.TaskStatus).IN_PROGRESS)}">
+                            <form>
+                                <div class="card shadow-sm">
+                                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                        <title>Placeholder</title>
+                                        <rect width="100%" height="100%"></rect>
+                                        <text x="50%" y="50%" fill="#eceeef" dy=".3em" class="text-inside-rectangle">
+                                            <tspan x="50%" dy="1.2em" th:text="${task.getTitle()}"></tspan>
+                                        </text>
+                                    </svg>
+
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <svg width="30" height="30">
+                                                <circle cx="15" cy="12" r="6"
+                                                        th:switch="${task.getInterests().contains(T(diploma.trackingApp.models.Interest).IMPORTANT)}"
+                                                        th:style="${'fill: ' + (task.getInterests().contains(T(diploma.trackingApp.models.Interest).IMPORTANT) ? 'red' : (task.getInterests().contains(T(diploma.trackingApp.models.Interest).MEDIUM) ? 'orange' : 'green'))}">
+                                                </circle>
+                                            </svg>
+                                            <p class="card-text ml-2" th:text="${task.getFullText()}"></p>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="btn-group">
+                                                <a th:href="@{task/{id}(id=${task.getId()})}" class="btn btn-sm btn-outline-secondary">Просмотреть</a>
+                                                <a th:href="@{task/{id}/edit(id=${task.getId()})}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                                            </div>
+                                            <small class="text-body-secondary" th:text="${#dates.format(task.getEndTask(), 'dd.MM.yyyy')}"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-  </div>
 </div>
+
+<script>
+    // Функция для выполнения поиска
+    function performSearch(event) {
+        event.preventDefault();
+        var searchInput = document.getElementById('title').value;
+        if (searchInput.trim() !== '') {
+            var form = document.getElementById('filterForm');
+            form.action = '/admin/main';
+            form.submit();
+        }
+    }
+            // Обработчик события при нажатии на кнопку "Поиск"
+            var searchButton = document.querySelector('button[type="submit"]');
+            searchButton.addEventListener('click', performSearch);
+
+            // Функция для сохранения выбранного значения важности
+            function saveInterest() {
+                var interestsSelect = document.getElementById('interests');
+                localStorage.setItem('selectedInterest', interestsSelect.value);
+            }
+
+            // Обработчик события при изменении значения важности
+            var interestsSelect = document.getElementById('interests');
+            interestsSelect.addEventListener('change', function() {
+                if (this.value === '') {
+                    window.location.href = 'http://localhost:8080/admin/main';
+                } else {
+                    var form = document.getElementById('filterForm');
+                    form.action = '/admin/main';
+                    form.submit();
+                }
+                saveInterest();
+            });
+
+            // Загрузка сохраненного значения важности при загрузке страницы
+            var savedInterest = localStorage.getItem('selectedInterest');
+            if (savedInterest) {
+                interestsSelect.value = savedInterest;
+            }
+        </script>
+
 </body>
 </html>
+
+
+

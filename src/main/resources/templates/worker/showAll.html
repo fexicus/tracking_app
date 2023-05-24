@@ -1,25 +1,143 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>WORKERS</title>
+    <title>List of students</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css" th:href="@{/css/styleUserPage.css}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" type="text/css" media="all" href="/css/drop.css" th:href="@{/css/drop.css}" />
 </head>
 <body>
-<div th:each="worker : ${workers}">
-    <a th:href="@{/admin/worker/{id}(id=${worker.getId()})}"
-       th:text="${worker.getId() + ' - ' + worker.getName() + ' ' + worker.getSurname()
-       + ' ' + worker.getPatronymic()+ ', ' + worker.getSubject()}">123</a>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="sidebar position-fixed">
+                <a href="/admin/main" class="logo" style="display: flex; align-items: center;">
+                    <img src="/images/logo.png" alt="Your photo" class="logo-icon" width="50" height="50" style="margin-right: 10px;">
+                    <span class="logo-text" style="font-family: Arial, sans-serif; font-size: 28px;">TRACK APP</span>
+                </a>
+                <hr style="background-color: white;">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="/admin/main" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/main"></use>
+                            </svg>
+                            <span class="nav-text">Главная</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/showStudents" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/showStudents"></use>
+                            </svg>
+                            <span class="nav-text">Студенты</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/showWorkers" class="nav-link active" aria-current="page">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/showWorkers"></use>
+                            </svg>
+                            <span class="nav-text">Работники</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/task/newForStudent" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/task/newForStudent"></use>
+                            </svg>
+                            <span class="nav-text">Создать задачу студентам</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/task/newForWorker" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/task/newForWorker"></use>
+                            </svg>
+                            <span class="nav-text">Создать задачу работникам</span>
+                        </a>
+                    </li>
+                </ul>
+                <hr style="background-color: white;">
+                <br>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="dropdown">
+                        <img src="/images/admin.jpg" alt=" " width="32" height="32" class="rounded-circle avatar">
+                        <strong class="username" style="margin-left: 10px;">Admin</strong>
+                        <form th:action="@{/logout}" th:method="POST" style="margin-left: 90px;">
+                            <button class="btn btn-primary" type="submit">Выйти</button>
+                        </form>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
 
-    <form th:method="GET" th:action="@{/admin/worker/{id}/edit(id=${worker.getId()})}">
-        <input type="submit" value="Редактировать"/>
-    </form>
+        <div class="col-md order-md-2">
+            <div class="album py-5 bg-body-tertiary">
+                <div class="container">
+                    <h1>Список преподавателей</h1>
+                    <!--<form th:method="GET" th:action="@{/admin/showStudents}">
+                        <div class="form-group">
+                            <label for="course">Номер курса:</label>
+                            <select id="course" name="course" class="form-control">
+                                <option value="">Выберите номер курса</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Показать</button>
+                    </form>-->
+                    <table class="table table-striped table-bordered mt-4">
+                        <thead>
+                        <tr>
+                            <th>Фамилия</th>
+                            <th>Имя</th>
+                            <th>Отчество</th>
+                            <th>Предмет</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="worker : ${workers}">
+                            <td th:text="${worker.getSurname()}"></td>
+                            <td th:text="${worker.getName()}"></td>
+                            <td th:text="${worker.getPatronymic()}"></td>
+                            <td th:text="${worker.getSubject()}"></td>
+                            <td>
+                                <div class="btn-group">
+                                    <form th:method="GET" th:action="@{/admin/worker/{id}(id=${worker.getId()})}">
+                                        <button type="submit" class="btn btn-secondary">Подробнее</button>
+                                    </form>
+                                    <form th:method="GET" th:action="@{/admin/worker/{id}/edit(id=${worker.getId()})}">
+                                        <button type="submit" class="btn btn-secondary ml-3">Редактировать</button>
+                                    </form>
+                                    <form th:method="DELETE" th:action="@{/admin/worker/{id}(id=${worker.getId()})}">
+                                        <button type="submit" class="btn btn-danger ml-3">Удалить</button>
+                                    </form>
 
-    <form th:method="DELETE" th:action="@{/admin/worker/{id}(id=${worker.getId()})}">
-        <input type="submit" value="Удалить"/>
-    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <a href="/admin/worker/new" class="btn btn-primary">Добавить работника</a>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <a href="/admin/main" class="btn btn-primary">Вернуться на главную</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<a href="/admin/worker/new">Добавить преподавателя</a>
-<a href="/admin/main">Вернуться на главную</a>
 </body>
 </html>

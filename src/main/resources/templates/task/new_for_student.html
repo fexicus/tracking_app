@@ -1,35 +1,167 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css" th:href="@{/css/styleUserPage.css}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" type="text/css" media="all" href="/css/drop.css" th:href="@{/css/drop.css}" />
+    <link rel="stylesheet" type="text/css" media="all" href="/css/checkbox.css" th:href="@{/css/checkbox.css}" />
+
     <meta charset="UTF-8">
-    <title>NEW TASK</title>
+    <title>ADMIN</title>
 </head>
 <body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="sidebar position-fixed">
+                <a href="/admin/main" class="logo" style="display: flex; align-items: center;">
+                    <img src="/images/logo.png" alt="Your photo" class="logo-icon" width="50" height="50" style="margin-right: 10px;">
+                    <span class="logo-text" style="font-family: Arial, sans-serif; font-size: 28px;">TRACK APP</span>
+                </a>
+                <hr style="background-color: white;">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="/admin/main" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/main"></use>
+                            </svg>
+                            <span class="nav-text">Главная</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/showStudents" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/showStudents"></use>
+                            </svg>
+                            <span class="nav-text">Студенты</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/showWorkers" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/showWorkers"></use>
+                            </svg>
+                            <span class="nav-text">Работники</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/task/newForStudent" class="nav-link active" aria-current="page">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/task/newForStudent"></use>
+                            </svg>
+                            <span class="nav-text">Создать задачу студентам</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/task/newForWorker" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/admin/task/newForWorker"></use>
+                            </svg>
+                            <span class="nav-text">Создать задачу работникам</span>
+                        </a>
+                    </li>
+                </ul>
+                <hr style="background-color: white;">
+                <br>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="dropdown">
+                        <img src="/images/admin.jpg" alt=" " width="32" height="32" class="rounded-circle avatar">
+                        <strong class="username" style="margin-left: 10px;">Admin</strong>
+                        <form th:action="@{/logout}" th:method="POST" style="margin-left: 90px;">
+                            <button class="btn btn-primary" type="submit">Выйти</button>
+                        </form>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
 
 
-<form th:method="POST" th:action="@{/admin/main}" th:object="${task}">
-    <select id="student" name="student">
-        <option th:selected="${studentId == 0}" value="0">Выберите студента</option>
-        <th:block th:each="student : ${students}">
-            <option th:value="${student.id}" th:text="${student.name}" th:selected="${studentId == student.id}"></option>
-        </th:block>
-    </select>
-    <br>
-    <label for="all">Отправить всем студентам:</label>
-    <input type="checkbox" id="all" name="all"/>
-    <label for="title">Введите название задачи: </label>
-    <input type="text" th:field="*{title}" id="title"/>
-    <div style="color:red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title ERROR</div>
-    <br/>
-    <label for="fullText">Введите текст задачи: </label>
-    <input type="text" th:field="*{fullText}" id="fullText"/>
-    <div style="color:red" th:if="${#fields.hasErrors('fullText')}" th:errors="*{fullText}">fullText ERROR</div>
-    <br/>
-    <label for="endTask">Введите завершение задачи: </label>
-    <input type="text" th:field="*{endTask}" id="endTask"/>
-    <div style="color:red" th:if="${#fields.hasErrors('endTask')}" th:errors="*{endTask}">endTask ERROR</div>
-    <br/>
-    <button type="submit" class="btn btn-primary">Создать задачу</button>
-</form>
+        <div class="col-md order-md-2">
+            <div class="album py-5 bg-body-tertiary">
+                <div class="container">
+                    <h1>Создание задачи для студентов</h1>
+                    <form th:method="POST" th:action="@{/admin/main}" th:object="${task}" class="needs-validation">
+                        <div class="form-group">
+                            <select id="student" name="student" class="form-control">
+                                <option th:selected="${studentId == 0}" value="0">Выберите студента</option>
+                                <th:block th:each="student : ${students}">
+                                    <option th:value="${student.id}" th:text="${student.name}" th:selected="${studentId == student.id}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="interest">Выберите важность задачи:</label>
+                            <select id="interest" name="interest" class="form-control">
+                                <option value="IMPORTANT">Важная</option>
+                                <option value="MEDIUM">Средняя</option>
+                                <option value="UNIMPORTANT">Неважная</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="all" name="all"/>
+                                <label class="form-check-label" for="all">
+                                    <span class="form-check-icon"></span> <!-- Иконка тика от Bootstrap -->
+                                    Отправить всем студентам
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="title">Введите название задачи:</label>
+                            <input type="text" th:field="*{title}" id="title" class="form-control" required/>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Ошибка ввода</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="fullText">Введите текст задачи:</label>
+                            <textarea th:field="*{fullText}" id="fullText" class="form-control" rows="5" required></textarea>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('fullText')}" th:errors="*{fullText}">Ошибка ввода</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="endTask">Введите завершение задачи:</label>
+                            <input type="text" th:field="*{endTask}" id="endTask" class="form-control datepicker" required/>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('endTask')}" th:errors="*{endTask}">Ошибка ввода</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Создать задачу</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!-- Datepicker JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+<script>
+    // Инициализация календаря на поле ввода даты
+    $(document).ready(function() {
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            clearBtn: true,
+            todayHighlight: true
+        }).on('changeDate', function(e) {
+            // При выборе даты обновляем значение в поле ввода
+            var selectedDate = e.format('dd/mm/yyyy');
+            $(this).val(selectedDate);
+        });
+    });
+</script>
 </body>
 </html>
+
