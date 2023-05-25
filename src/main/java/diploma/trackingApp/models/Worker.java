@@ -41,6 +41,10 @@ public class Worker {
     @Size(min = 2)
     private String subject;
 
+    @Column(name = "department")
+    @Size(min = 3)
+    private String department;
+
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User workUser;
@@ -51,14 +55,21 @@ public class Worker {
             inverseJoinColumns = @JoinColumn(name = "task_id"))
     private Set<Task> tasksForWorkers = new HashSet<>();
 
+    public void setWorkUser(User user) {
+        this.workUser = user;
+        user.setWorker(this);
+    }
+
     public Worker(){}
 
-    public Worker(int id, String name, String surname, String patronymic, String subject, User workUser) {
+    public Worker(int id, String name, String surname, String patronymic, String subject, String department, User workUser, Set<Task> tasksForWorkers) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
         this.subject = subject;
+        this.department = department;
         this.workUser = workUser;
+        this.tasksForWorkers = tasksForWorkers;
     }
 }

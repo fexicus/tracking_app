@@ -4,6 +4,7 @@ import diploma.trackingApp.models.Student;
 import diploma.trackingApp.models.Task;
 import diploma.trackingApp.models.User;
 import diploma.trackingApp.repositories.StudentRepository;
+import diploma.trackingApp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,11 +15,13 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class StudentService {
     private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository, UserService userService) {
+    public StudentService(StudentRepository studentRepository, UserRepository userRepository, UserService userService) {
         this.studentRepository = studentRepository;
+        this.userRepository = userRepository;
         this.userService = userService;
     }
 
@@ -82,6 +85,16 @@ public class StudentService {
                 addTask(student, task);
             }
         }
+    }
+
+    @Transactional
+    public void updateUserId(int studentId, int userId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Worker not found with id: " + studentId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+        student.setStudUser(user);
+        studentRepository.save(student);
     }
 
 }
