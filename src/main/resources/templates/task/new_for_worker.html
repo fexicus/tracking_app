@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
   <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css" th:href="@{/css/styleUserPage.css}"/>
-  <link rel="stylesheet" type="text/css" media="all" href="/css/main.css" th:href="@{/css/main.css}" />
+  <link rel="stylesheet" type="text/css" media="all" href="/css/boxbar.css" th:href="@{/css/boxbar.css}" />
   <link rel="stylesheet" type="text/css" media="all" href="/css/drop.css" th:href="@{/css/drop.css}" />
   <link rel="stylesheet" type="text/css" media="all" href="/css/checkbox.css" th:href="@{/css/checkbox.css}" />
 
@@ -92,7 +92,7 @@
               <select id="worker" name="worker" class="form-control">
                 <option th:selected="${workerId == 0}" value="0">Выберите работника</option>
                 <th:block th:each="worker : ${workers}">
-                  <option th:value="${worker.id}" th:text="${worker.name}" th:selected="${workerId == worker.id}"></option>
+                  <option th:value="${worker.id}" th:text="${worker.surname + ' ' + worker.name + ' ' + worker.patronymic}" th:selected="${workerId == worker.id}"></option>
                 </th:block>
               </select>
             </div>

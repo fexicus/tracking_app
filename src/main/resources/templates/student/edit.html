@@ -6,7 +6,7 @@
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
           crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css" th:href="@{/css/styleUserPage.css}"/>
-    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" type="text/css" media="all" href="/css/boxbar.css" th:href="@{/css/boxbar.css}" />
     <link rel="stylesheet" type="text/css" media="all" href="/css/drop.css" th:href="@{/css/drop.css}" />
 
     <meta charset="UTF-8">
@@ -111,13 +111,17 @@
                         </div>
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('nameOfGroup')}" th:errors="*{nameOfGroup}">nameOfGroup ERROR</div>
                     </div>
-                    <div class="form-group">
-                        <label for="course" class="mt-3">Номер курса:</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control col-4" th:field="*{course}" id="course"/>
+                    <div class="col-md-6">
+                        <label for="course" class="form-label">Введите номер курса:</label>
+                        <select class="form-select" id="course" th:field="*{course}" required="">
+                            <option th:each="i : ${#numbers.sequence(1, 6)}" th:value="${i}" th:text="${i}"></option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('student.course')}" th:errors="*{student.course}">
+                            Неверный номер курса
                         </div>
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('course')}" th:errors="*{course}">course ERROR</div>
                     </div>
+
+                    <input type="hidden" th:attr="value=${student.studUser.id}" name="userId" />
                     <div class="mb-3"></div> <!-- Добавлено расстояние между формой и кнопкой -->
                     <button type="submit" class="btn btn-primary">Обновить</button>
                 </form>

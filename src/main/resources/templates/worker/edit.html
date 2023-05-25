@@ -6,7 +6,7 @@
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
           crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css" th:href="@{/css/styleUserPage.css}"/>
-    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" type="text/css" media="all" href="/css/boxbar.css" th:href="@{/css/boxbar.css}" />
     <link rel="stylesheet" type="text/css" media="all" href="/css/drop.css" th:href="@{/css/drop.css}" />
 
     <meta charset="UTF-8">
@@ -82,35 +82,48 @@
         <div class="col-md order-md-2">
             <div class="album py-5 bg-body-tertiary">
                 <h2>Редактирование работника</h2>
-                <form th:method="PATCH" th:action="@{/admin/worker/{id}(id=${worker.getId()})}" th:object="${worker}">
+                <form th:method="PATCH" th:action="@{/admin/worker/{id}(id=${worker.getId()})}">
                     <div class="form-group">
                         <label for="name" class="mt-3">Имя работника:</label>
                         <div class="input-group">
-                            <input type="text" class="form-control col-4" th:field="*{name}" id="name"/>
+                            <input type="text" class="form-control col-4" th:field="*{worker.name}" id="name"/>
                         </div>
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name ERROR</div>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('worker.name')}" th:errors="*{worker.name}">name ERROR</div>
                     </div>
                     <div class="form-group">
                         <label for="surname" class="mt-3">Фамилия:</label>
                         <div class="input-group">
-                            <input type="text" class="form-control col-4" th:field="*{surname}" id="surname"/>
+                            <input type="text" class="form-control col-4" th:field="*{worker.surname}" id="surname"/>
                         </div>
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">surname ERROR</div>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('worker.surname')}" th:errors="*{sworker.urname}">surname ERROR</div>
                     </div>
                     <div class="form-group">
                         <label for="patronymic" class="mt-3">Отчество:</label>
                         <div class="input-group">
-                            <input type="text" class="form-control col-4" th:field="*{patronymic}" id="patronymic"/>
+                            <input type="text" class="form-control col-4" th:field="*{worker.patronymic}" id="patronymic"/>
                         </div>
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}">patronymic ERROR</div>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('worker.patronymic')}" th:errors="*{worker.patronymic}">patronymic ERROR</div>
                     </div>
                     <div class="form-group">
                         <label for="subject" class="mt-3">Наименование предмета:</label>
                         <div class="input-group">
-                            <input type="text" class="form-control col-4" th:field="*{subject}" id="subject"/>
+                            <input type="text" class="form-control col-4" th:field="*{worker.subject}" id="subject"/>
                         </div>
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}">subject ERROR</div>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('worker.subject')}" th:errors="*{worker.subject}">subject ERROR</div>
                     </div>
+                    <div class="col-12">
+                        <label for="department" class="form-label">Введите кафедру преподавания:</label>
+                        <select class="form-select" id="department" th:field="*{worker.department}" required="">
+                            <option value="304">304</option>
+                            <option value="307">307</option>
+                            <option value="315">315</option>
+                            <option value="311">311</option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('worker.department')}" th:errors="*{worker.department}">
+                            Неверно введен номер кафедры
+                        </div>
+                    </div>
+                    <input type="hidden" th:attr="value=${worker.workUser.id}" name="userId" />
                     <div class="mb-3"></div> <!-- Добавлено расстояние между формой и кнопкой -->
                     <button type="submit" class="btn btn-primary">Обновить</button>
                 </form>

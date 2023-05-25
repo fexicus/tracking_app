@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css"
           th:href="@{/css/styleUserPage.css}"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="/css/boxbar.css" th:href="@{/css/boxbar.css}"/>
     <link rel="stylesheet" type="text/css" media="all" href="/css/drop.css" th:href="@{/css/drop.css}"/>
 
     <meta charset="UTF-8">
@@ -117,37 +117,35 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            document.getElementById('title').addEventListener('input', function () {
-                document.getElementById('filterForm').submit();
-            });
-
-            var interestsSelect = document.getElementById('interests');
-            interestsSelect.addEventListener('change', function () {
-                if (this.value === '') {
-                    window.location.href = 'http://localhost:8080/admin/main';
-                } else {
-                    document.getElementById('filterForm').submit();
-                }
-            });
-
-            // Сохранение выбранного значения фильтра важности
-            var savedInterest = localStorage.getItem('selectedInterest');
-            if (savedInterest) {
-                interestsSelect.value = savedInterest;
-            }
-
-            // Обработчик изменения значения фильтра важности
-            interestsSelect.addEventListener('change', function () {
-                localStorage.setItem('selectedInterest', this.value);
-            });
-        </script>
-
-
-
     </div>
 </div>
+
+
+<script>
+    document.getElementById('title').addEventListener('input', function () {
+        document.getElementById('filterForm').submit();
+    });
+
+    var interestsSelect = document.getElementById('interests');
+    interestsSelect.addEventListener('change', function () {
+        if (this.value === '') {
+            window.location.href = 'http://localhost:8080/admin/main';
+        } else {
+            document.getElementById('filterForm').submit();
+        }
+    });
+
+    // Сохранение выбранного значения фильтра важности
+    var savedInterest = localStorage.getItem('selectedInterest');
+    if (savedInterest) {
+        interestsSelect.value = savedInterest;
+    }
+
+    // Обработчик изменения значения фильтра важности
+    interestsSelect.addEventListener('change', function () {
+        localStorage.setItem('selectedInterest', this.value);
+    });
+</script>
 </body>
 </html>
 

@@ -6,7 +6,7 @@
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
           crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css" th:href="@{/css/styleUserPage.css}"/>
-    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" type="text/css" media="all" href="/css/boxbar.css" th:href="@{/css/boxbar.css}" />
 
     <meta charset="UTF-8">
     <title>ADMIN</title>
@@ -106,7 +106,7 @@
                         </div>
                         <div class="row g-3">
                             <div class="col-sm-6">
-                                <label for="name" class="form-label">Введите имя студента:</label>
+                                <label for="name" class="form-label">Введите имя:</label>
                                 <input type="text" class="form-control" id="name" th:field="*{worker.name}" required="">
                                 <div class="invalid-feedback" th:if="${#fields.hasErrors('worker.name')}" th:errors="*{worker.name}">
                                     Неверное имя
@@ -131,6 +131,18 @@
                                 <input type="text" class="form-control" id="subject" th:field="*{worker.subject}" required="">
                                 <div class="invalid-feedback" th:if="${#fields.hasErrors('worker.subject')}" th:errors="*{worker.subject}">
                                     Неверный номер группы
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="department" class="form-label">Введите кафедру преподавания:</label>
+                                <select class="form-select" id="department" th:field="*{worker.department}" required="">
+                                    <option value="304">304</option>
+                                    <option value="307">307</option>
+                                    <option value="315">315</option>
+                                    <option value="311">311</option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('worker.department')}" th:errors="*{worker.department}">
+                                    Неверно введен номер кафедры
                                 </div>
                             </div>
                         </div>

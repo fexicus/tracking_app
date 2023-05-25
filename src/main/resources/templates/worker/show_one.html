@@ -5,7 +5,7 @@
     <title>Student Info</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css" th:href="@{/css/styleUserPage.css}"/>
-    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" type="text/css" media="all" href="/css/boxbar.css" th:href="@{/css/boxbar.css}" />
     <style>
         body {
             background-color: #f8f9fa;
@@ -154,6 +154,14 @@
                                 </div>
                                 <div class="col">
                                     <p class="mb-0" th:text="${worker.getSubject() ?: '-'}"></p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-4">
+                                    <p class="font-weight-bold mb-0">Наименование кафедры:</p>
+                                </div>
+                                <div class="col">
+                                    <p class="mb-0" th:text="${worker.getDepartment() ?: '-'}"></p>
                                 </div>
                             </div>
                         </div>
