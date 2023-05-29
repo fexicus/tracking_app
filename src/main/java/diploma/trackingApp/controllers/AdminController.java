@@ -8,9 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+
 
 
 import javax.validation.Valid;
@@ -20,8 +18,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
-    //private final AdminService adminService;
 
     private final UserService userService;
     private final StudentService studentService;
@@ -84,12 +80,6 @@ public class AdminController {
     }
 
     //--------------------------------------С Т У Д Е Н Т Ы------------------------------------------------
-    //показ всех студентов в вузе - необходимо сделать выпадающий список для курсов и т.д.
-    /*@GetMapping("/showStudents")
-    public String showStudents(Model model){
-        model.addAttribute("students", studentService.findAll());
-        return "student/showAll";
-    }*/
 
     @GetMapping("/showStudents")
     public String showStudents(@RequestParam(value = "course", required = false) String courseNumber, Model model) {
@@ -139,9 +129,10 @@ public class AdminController {
 
     //PATCH-метод изменения информации о каждом с студенте
     @PatchMapping("student/{id}")
-    public String updateStudent(@ModelAttribute("student") @Valid Student student, @PathVariable("id") int id, User user){
-        //student.getStudUser().setId(user.get().getStudent().getId());
+    public String updateStudent(@ModelAttribute("student") @Valid Student student, @PathVariable("id") int id,
+                                @RequestParam("userId") int userId){
         studentService.update(id, student);
+        studentService.updateUserId(id, userId);
         return "redirect:/admin/showStudents";
     }
 
@@ -191,7 +182,7 @@ public class AdminController {
 
     //GET-метод просматривания страницы изменения информации у преподавателя
     @GetMapping("worker/{id}/edit")
-    public String editWorker(@PathVariable("id") int id, Model model){
+    public String editWorker(@PathVariable("id") int id, Model model, @ModelAttribute("user") User user){
         model.addAttribute("worker", workerService.findOne(id));
         return "worker/edit";
     }
@@ -199,8 +190,10 @@ public class AdminController {
     //PATCH-метод изменения информации о каждом преподавателе
     @PatchMapping("worker/{id}")
     public String updateWorker(@ModelAttribute("worker") @Valid Worker worker,
-                               @PathVariable("id") int id){
+                               @PathVariable("id") int id,
+                               @RequestParam("userId") int userId) {
         workerService.update(id, worker);
+        workerService.updateUserId(id, userId);
         return "redirect:/admin/showWorkers";
     }
 
@@ -229,6 +222,7 @@ public class AdminController {
         model.addAttribute("task", new Task());
         model.addAttribute("students", studentService.findAll());
         model.addAttribute("interests", Interest.values()); // Передаем список значений Enum в модель
+
         return "task/new_for_student";
     }
 
@@ -236,29 +230,11 @@ public class AdminController {
     @PostMapping("/main")
     public String createTaskForStudents(@ModelAttribute("task") Task task, @RequestParam("student") int studentId,
                                         @RequestParam(value = "all", required = false) Boolean allStudents,
-                                        @RequestParam("interest") Interest interest){
-        if (allStudents != null && allStudents) {
-            task.setTaskStatuses(Collections.singleton(TaskStatus.IN_PROGRESS));
-            task.setInterests(Collections.singleton(interest)); // Установка значения Interests в Task
-            task.setStartTask(new Date());
-            taskService.save(task);
-
-            List<Student> students = studentService.findAll();
-            for (Student student : students) {
-                studentService.addTask(student, task);
-            }
-        }
-        else if (studentId != 0){
-            Student student = studentService.findOne(studentId);
-            task.setStudents(Collections.singletonList(student));
-            task.setTaskStatuses(Collections.singleton(TaskStatus.IN_PROGRESS));
-            task.setInterests(Collections.singleton(interest)); // Установка значения Interests в Task
-            task.setStartTask(new Date());
-            taskService.save(task);
-            studentService.addTask(student, task);
-        }
+                                        @RequestParam("interest") Interest interest) {
+        taskService.createTaskForStudents(task, studentId, allStudents, interest);
         return "redirect:/admin/main";
     }
+
 
     //добавление новой задачи в список всех задач для преподавателей
     @GetMapping("/task/newForWorker")
@@ -266,34 +242,25 @@ public class AdminController {
         model.addAttribute("task", new Task());
         model.addAttribute("workers", workerService.findAll());
         model.addAttribute("interests", Interest.values()); // Передаем список значений Enum в модель
+        model.addAttribute("departments", workerService.findAllDepartment()); // Список всех кафедр (уникальные значения поля department)
+        //model.addAttribute("selectedDepartment", ""); // Выбранная кафедра (по умолчанию пустая строка)
+        //model.addAttribute("groups", ""); // Список всех групп
         return "task/new_for_worker";
     }
+
+/*  @ResponseBody
+    @GetMapping("/task/workers")
+    public List<Worker> getWorkersByDepartment(@RequestParam("department") String department) {
+        return workerService.findByDepartment(department);
+    }*/
+
 
     //POST-метод для внесения новой задачи для преподавателей
     @PostMapping("/")
     public String createTaskForWorkers(@ModelAttribute("task") Task task, @RequestParam("worker") int workerId,
-                                        @RequestParam(value = "all", required = false) Boolean allWorkers,
-                                       @RequestParam("interest") Interest interest){
-        if (allWorkers != null && allWorkers) {
-            task.setTaskStatuses(Collections.singleton(TaskStatus.IN_PROGRESS));
-            task.setInterests(Collections.singleton(interest));
-            task.setStartTask(new Date());
-            taskService.save(task);
-
-            List<Worker> workers = workerService.findAll();
-            for (Worker worker : workers) {
-                workerService.addTask(worker, task);
-            }
-        }
-        else if (workerId != 0){
-            Worker worker = workerService.findOne(workerId);
-            task.setWorkers(Collections.singletonList(worker));
-            task.setTaskStatuses(Collections.singleton(TaskStatus.IN_PROGRESS));
-            task.setInterests(Collections.singleton(interest));
-            task.setStartTask(new Date());
-            taskService.save(task);
-            workerService.addTask(worker, task);
-        }
+                                       @RequestParam(value = "all", required = false) Boolean allWorkers,
+                                       @RequestParam("interest") Interest interest) {
+        taskService.createTaskForWorkers(task, workerId, allWorkers, interest);
         return "redirect:/admin/main";
     }
 

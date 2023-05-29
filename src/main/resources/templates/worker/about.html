@@ -61,7 +61,7 @@
                 <hr style="background-color: white;">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="/worker/main" class="nav-link active" aria-current="page">
+                        <a href="/worker/main" class="nav-link text-white">
                             <svg class="bi pe-none nav-icon" width="16" height="16">
                                 <use xlink:href="/worker/main"></use>
                             </svg>
@@ -70,11 +70,27 @@
                     </li>
 
                     <li>
-                        <a th:href="@{/worker/{id}(id=${worker.getId()})}" class="nav-link text-white">
+                        <a th:href="@{/worker/{id}(id=${worker.getId()})}" class="nav-link active" aria-current="page" >
                             <svg class="bi pe-none nav-icon" width="16" height="16">
                                 <use xlink:href="${worker.getId()}"></use>
                             </svg>
                             <span class="nav-text">Информация о себе</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/worker/task/newForStudent" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/worker/task/newForStudent"></use>
+                            </svg>
+                            <span class="nav-text">Создать задачу студентам</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/worker/task/newForStudent" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/worker/task/newForStudent"></use>
+                            </svg>
+                            <span class="nav-text">Созданные задачи для студентов</span>
                         </a>
                     </li>
                 </ul>

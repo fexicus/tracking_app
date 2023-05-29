@@ -8,7 +8,6 @@
     <link rel="stylesheet" type="text/css" media="all" href="/css/styleUserPage.css" th:href="@{/css/styleUserPage.css}"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" media="all" href="/css/boxbar.css" th:href="@{/css/boxbar.css}"/>
-    <!--<link rel="stylesheet" type="text/css" media="all" href="/css/drop.css" th:href="@{/css/drop.css}"/>-->
 
     <meta charset="UTF-8">
     <title>ADMIN</title>
@@ -62,7 +61,7 @@
                             <svg class="bi pe-none nav-icon" width="16" height="16">
                                 <use xlink:href="/admin/task/newForWorker"></use>
                             </svg>
-                            <span class="nav-text">Создать задачу работникам</span>
+                            <span class="nav-text">Создать задачу преподавателям</span>
                         </a>
                     </li>
                 </ul>
@@ -121,12 +120,11 @@
                                 <div class="card shadow-sm">
                                     <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
                                         <title>Placeholder</title>
-                                        <rect width="100%" height="100%"></rect>
-                                        <text x="50%" y="50%" fill="#eceeef" dy=".3em" class="text-inside-rectangle">
-                                            <tspan x="50%" dy="1.2em" th:text="${task.getTitle()}"></tspan>
+                                        <rect width="100%" height="100%" th:classappend="${task.getColorOfTask()} == 'green' ? 'green' : (${task.getColorOfTask()} == 'yellow' ? 'yellow' : 'default')" />
+                                        <text x="50%" y="50%" fill="#4f4f4f" dy=".3em" class="text-inside-rectangle">
+                                            <tspan x="50%" dy="1.2em" th:text="${task.getTitle()}" style="font-size: 24px; font-weight: bold;" />
                                         </text>
                                     </svg>
-
                                     <div class="card-body">
                                         <div class="d-flex align-items-start">
                                             <svg width="30" height="30">
@@ -135,7 +133,7 @@
                                                         th:style="${'fill: ' + (task.getInterests().contains(T(diploma.trackingApp.models.Interest).IMPORTANT) ? 'red' : (task.getInterests().contains(T(diploma.trackingApp.models.Interest).MEDIUM) ? 'orange' : 'green'))}">
                                                 </circle>
                                             </svg>
-                                            <p class="card-text ml-2" th:text="${task.getFullText()}"></p>
+                                            <p class="card-text ml-2" th:text="${task.getFullText().length() > 35 ? task.getFullText().substring(0, 35) + '...' : task.getFullText()}"></p>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
@@ -143,6 +141,10 @@
                                                 <a th:href="@{task/{id}/edit(id=${task.getId()})}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
                                             </div>
                                             <small class="text-body-secondary" th:text="${#dates.format(task.getEndTask(), 'dd.MM.yyyy')}"></small>
+                                        </div>
+                                        <br>
+                                        <div>
+                                            <small class="text-body-secondary"><span th:text="${task.getCreator()}"></span></small>
                                         </div>
                                     </div>
                                 </div>

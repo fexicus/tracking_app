@@ -63,7 +63,7 @@
               <svg class="bi pe-none nav-icon" width="16" height="16">
                 <use xlink:href="/admin/task/newForWorker"></use>
               </svg>
-              <span class="nav-text">Создать задачу работникам</span>
+              <span class="nav-text">Создать задачу преподавателям</span>
             </a>
           </li>
         </ul>
@@ -86,24 +86,8 @@
     <div class="col-md order-md-2">
       <div class="album py-5 bg-body-tertiary">
         <div class="container">
-          <h1>Создание задачи для работников</h1>
+          <h1>Создание задачи для преподавателей</h1>
           <form th:method="POST" th:action="@{/admin/}" th:object="${task}" class="needs-validation">
-            <div class="form-group">
-              <select id="worker" name="worker" class="form-control">
-                <option th:selected="${workerId == 0}" value="0">Выберите работника</option>
-                <th:block th:each="worker : ${workers}">
-                  <option th:value="${worker.id}" th:text="${worker.surname + ' ' + worker.name + ' ' + worker.patronymic}" th:selected="${workerId == worker.id}"></option>
-                </th:block>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="interest">Выберите важность задачи:</label>
-              <select id="interest" name="interest" class="form-control">
-                <option value="IMPORTANT">Важная</option>
-                <option value="MEDIUM">Средняя</option>
-                <option value="UNIMPORTANT">Неважная</option>
-              </select>
-            </div>
             <div class="form-group">
               <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="all" name="all"/>
@@ -113,6 +97,29 @@
                 </label>
               </div>
             </div>
+            <!--<div class="form-group">
+              <label for="department">Кафедра:</label>
+              <select id="department" name="department" class="form-control" onchange="updateWorkersList()">
+              <option value="">Выберите кафедру</option>
+                <option th:each="department : ${departments}" th:value="${department}" th:text="${department}"></option>
+              </select>
+            </div>-->
+
+            <select id="worker" name="worker" class="form-control">
+              <option th:selected="${workerId == 0}" value="0">Выберите работника</option>
+              <th:block th:each="worker : ${workers}">
+                <option th:value="${worker.id}" th:text="${worker.surname + ' ' + worker.name + ' ' + worker.patronymic}" th:selected="${workerId == worker.id}"></option>
+              </th:block>
+            </select>
+            <div class="form-group">
+              <label for="interest">Выберите важность задачи:</label>
+              <select id="interest" name="interest" class="form-control">
+                <option value="IMPORTANT">Важная</option>
+                <option value="MEDIUM">Средняя</option>
+                <option value="UNIMPORTANT">Неважная</option>
+              </select>
+            </div>
+
 
             <div class="form-group">
               <label for="title">Введите название задачи:</label>
@@ -146,7 +153,7 @@
 <!-- Datepicker JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
-<script>
+<script th:inline="javascript">
   // Инициализация календаря на поле ввода даты
   $(document).ready(function() {
     $('.datepicker').datepicker({
@@ -160,7 +167,32 @@
       $(this).val(selectedDate);
     });
   });
+
+
+  function updateWorkersList() {
+    var department = document.getElementById("department").value;
+
+    var workerSelect = document.getElementById("worker");
+    workerSelect.innerHTML = ""; // Очистка списка преподавателей
+
+    $.ajax({
+      url: "/admin/task/workers?department=" + department,
+      type: "GET",
+      success: function(data) {
+        data.forEach(function(worker) {
+          var option = document.createElement("option");
+          option.value = worker.id.id;
+          option.text = worker.name;
+          workerSelect.appendChild(option);
+        });
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.error("Произошла ошибка при загрузке списка преподавателей:", errorThrown);
+      }
+    });
+  }
+
+
 </script>
 </body>
 </html>
-

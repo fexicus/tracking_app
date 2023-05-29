@@ -1,16 +1,11 @@
 package diploma.trackingApp.services;
 
-import diploma.trackingApp.models.Interest;
-import diploma.trackingApp.models.Task;
-import diploma.trackingApp.models.TaskStatus;
+import diploma.trackingApp.models.*;
 import diploma.trackingApp.repositories.TaskRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -18,14 +13,17 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
 
+    private final StudentService studentService;
 
-    public TaskService(TaskRepository taskRepository) {
+    private final WorkerService workerService;
+
+
+    public TaskService(TaskRepository taskRepository, StudentService studentService, WorkerService workerService) {
         this.taskRepository = taskRepository;
+        this.studentService = studentService;
+        this.workerService = workerService;
     }
 
-    public List<Task> findAll() {
-        return taskRepository.findAll();
-    }
 
     public List<Task> findAllWithResearch(String title) {
         if (title != null) {
@@ -47,25 +45,41 @@ public class TaskService {
     }
 
     @Transactional
-    public void saveForStatus(Task task) {
-        taskRepository.save(task); // Сохраняем задачу
+    public void createTaskForStudents(Task task, int studentId, Boolean allStudents, Interest interest) {
+        task.setTaskStatuses(Collections.singleton(TaskStatus.IN_PROGRESS));
+        task.setInterests(Collections.singleton(interest));
+        task.setColorOfTask("green");
+        task.setCreator("Администрация");
+        task.setStartTask(new Date());
 
-        // Обновляем статусы задач
-        if (isTaskExpired(task)) {
-            task.getTaskStatuses().remove(TaskStatus.IN_PROGRESS);
-            task.getTaskStatuses().add(TaskStatus.COMPLETED);
-        } else if (!task.getTaskStatuses().contains(TaskStatus.IN_PROGRESS)) {
-            task.getTaskStatuses().add(TaskStatus.IN_PROGRESS);
+        if (allStudents != null && allStudents) {
+            saveTaskForAllStudents(task);
+        } else if (studentId != 0) {
+            saveTaskForStudent(task, studentId);
         }
-
-        taskRepository.save(task); // Сохраняем обновленные статусы задач
+    }
+    @Transactional
+    public void saveTaskForAllStudents(Task task) {
+        List<Student> students = studentService.findAll();
+        for (Student student : students) {
+            addTaskToStudent(student, task);
+        }
+        taskRepository.save(task);
+    }
+    @Transactional
+    public void saveTaskForStudent(Task task, int studentId) {
+        Student student = studentService.findOne(studentId);
+        if (student != null) {
+            task.setStudents(Collections.singletonList(student));
+            addTaskToStudent(student, task);
+            taskRepository.save(task);
+        }
+    }
+    @Transactional
+    public void addTaskToStudent(Student student, Task task) {
+        studentService.addTask(student, task);
     }
 
-/*    @Transactional
-    public void update(int id, Task updatedTask){
-        updatedTask.setId(id);
-        taskRepository.save(updatedTask);
-    }*/
 
     @Transactional
     public void update(int id, Task updatedTask){
@@ -88,21 +102,8 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
-    @Transactional
-    public List<Task> findByStudentsId(int id) {
-        return taskRepository.findByStudentsId(id);
-    }
-
-    @Transactional
-    public List<Task> findByWorkersId(int id) {
-        return taskRepository.findByWorkersId(id);
-    }
-
     public List<Task> findAllWithResearchAndImportance(String title, Interest importance) {
-        // Perform a database query or any other necessary operations to retrieve tasks based on the given parameters
-        // You can combine the title and importance filters in the query or apply them separately as per your requirements
 
-        // Example implementation using a JPA repository
         if (title != null && !title.isEmpty() && importance != null) {
             return taskRepository.findByTitleContainingAndInterests(title, importance);
         } else if (title != null && !title.isEmpty()) {
@@ -110,7 +111,6 @@ public class TaskService {
         } else if (importance != null) {
             return taskRepository.findByInterests(importance);
         } else {
-            // Return all tasks if no filters are applied
             return taskRepository.findAll();
         }
     }
@@ -148,6 +148,41 @@ public class TaskService {
         }
 
         return completedTasks;
+    }
+    @Transactional
+    public void createTaskForWorkers(Task task, int workerId, Boolean allWorkers, Interest interest) {
+        task.setTaskStatuses(Collections.singleton(TaskStatus.IN_PROGRESS));
+        task.setInterests(Collections.singleton(interest));
+        task.setColorOfTask("yellow");
+        task.setCreator("Администрация");
+        task.setStartTask(new Date());
+
+        if (allWorkers != null && allWorkers) {
+            saveTaskForAllWorkers(task);
+        } else if (workerId != 0) {
+            saveTaskForWorker(task, workerId);
+        }
+    }
+    @Transactional
+    public void saveTaskForAllWorkers(Task task) {
+        List<Worker> workers = workerService.findAll();
+        for (Worker worker : workers) {
+            addTaskToWorker(worker, task);
+        }
+        taskRepository.save(task);
+    }
+    @Transactional
+    public void saveTaskForWorker(Task task, int workerId) {
+        Worker worker = workerService.findOne(workerId);
+        if (worker != null) {
+            task.setWorkers(Collections.singletonList(worker));
+            addTaskToWorker(worker, task);
+            taskRepository.save(task);;
+        }
+    }
+    @Transactional
+    public void addTaskToWorker(Worker worker, Task task) {
+        workerService.addTask(worker, task);
     }
 
 

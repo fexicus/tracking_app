@@ -37,6 +37,12 @@ public class Task {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date endTask;
 
+    @Column(name = "colorOfTask")
+    private String colorOfTask;
+
+    @Column(name = "creator")
+    private String creator;
+
     @ElementCollection(targetClass = TaskStatus.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "task_taskStatus",
             joinColumns = @JoinColumn(name = "task_id"))

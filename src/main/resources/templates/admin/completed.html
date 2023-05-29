@@ -63,7 +63,7 @@
                             <svg class="bi pe-none nav-icon" width="16" height="16">
                                 <use xlink:href="/admin/task/newForWorker"></use>
                             </svg>
-                            <span class="nav-text">Создать задачу работникам</span>
+                            <span class="nav-text">Создать задачу преподавателям</span>
                         </a>
                     </li>
                 </ul>
@@ -82,41 +82,47 @@
             </div>
         </div>
 
-
         <div class="col-md order-md-2">
             <div class="album py-5 bg-body-tertiary">
                 <div class="container">
-                        <div th:each="task : ${completedTasks}" class="col">
-                            <form>
-                                <div class="card shadow-sm">
-                                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-                                        <title>Placeholder</title>
-                                        <rect width="100%" height="100%"></rect>
-                                        <text x="50%" y="50%" fill="#eceeef" dy=".3em" class="text-inside-rectangle">
-                                            <tspan x="50%" dy="1.2em" th:text="${task.getTitle()}"></tspan>
-                                        </text>
-                                    </svg>
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    <div th:each="task : ${completedTasks}" class="col">
+                        <form>
+                            <div class="card shadow-sm">
+                                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                    <title>Placeholder</title>
+                                    <rect width="100%" height="100%" fill="#ccc"></rect>
+                                    <text x="50%" y="50%" fill="#eceeef" dy=".3em" class="text-inside-rectangle">
+                                        <tspan x="50%" dy="1.2em" th:text="${task.getTitle()}" style="font-size: 24px; font-weight: bold;" fill="black"></tspan>
+                                    </text>
+                                </svg>
 
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-start">
-                                            <svg width="30" height="30">
-                                                <circle cx="15" cy="12" r="6" th:style="${'fill: gray'}"></circle>
-                                            </svg>
-                                            <p class="card-text ml-2" th:text="${task.getFullText()}"></p>
+
+                                <div class="card-body">
+                                    <div class="d-flex align-items-start">
+                                        <svg width="30" height="30">
+                                            <circle cx="15" cy="12" r="6" th:style="${'fill: gray'}"></circle>
+                                        </svg>
+                                        <p class="card-text ml-2" th:text="${task.getFullText().length() > 35 ? task.getFullText().substring(0, 35) + '...' : task.getFullText()}"></p>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                                            <a th:href="@{task/{id}(id=${task.getId()})}" class="btn btn-sm btn-outline-secondary">Просмотреть</a>
                                         </div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
-                                                <a th:href="@{task/{id}(id=${task.getId()})}" class="btn btn-sm btn-outline-secondary">Просмотреть</a>
-                                            </div>
-                                            <small class="text-body-secondary" th:text="${#dates.format(task.getEndTask(), 'dd.MM.yyyy')}"></small>
-                                        </div>
+                                        <small class="text-body-secondary" th:text="${#dates.format(task.getEndTask(), 'dd.MM.yyyy')}"></small>
+                                    </div>
+                                    <div>
+                                        <small class="text-body-secondary">От: <span th:text="${task.getCreator()}"></span></small>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                        </form>
+                    </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 

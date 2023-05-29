@@ -54,14 +54,6 @@ public class StudentService {
     public List<Student> findStudentsByCourse(String course){
         return studentRepository.findByCourse(course);
     }
-    @Transactional
-    public List<Student> findByUser(User user) {
-        return studentRepository.findByStudUser(user);
-    }
-    @Transactional
-    public List<Student> findByStudUserEmail(String email){
-        return studentRepository.findByStudUserEmail(email);
-    }
 
     @Transactional
     public void addTask(Student student, Task task) {
@@ -72,20 +64,6 @@ public class StudentService {
         tasks.add(task);
     }
 
-    @Transactional
-    public void addTasks(List<Student> students, List<Task> tasks) {
-        if (students == null || tasks == null) {
-            throw new IllegalArgumentException("Students and tasks cannot be null");
-        }
-        if (students.isEmpty() || tasks.isEmpty()) {
-            throw new IllegalArgumentException("Students and tasks cannot be empty");
-        }
-        for (Student student : students) {
-            for (Task task : tasks) {
-                addTask(student, task);
-            }
-        }
-    }
 
     @Transactional
     public void updateUserId(int studentId, int userId) {

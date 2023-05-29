@@ -11,8 +11,5 @@ import java.util.Spliterator;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Integer> {
     List<Student> findByCourse(String course);
-    List<Student> findByStudUser(User user);
-
-    List<Student> findByStudUserEmail(String email);
 
 }

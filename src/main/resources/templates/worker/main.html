@@ -37,6 +37,22 @@
                             <span class="nav-text">Информация о себе</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="/worker/task/newForStudent" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/worker/task/newForStudent"></use>
+                            </svg>
+                            <span class="nav-text">Создать задачу студентам</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/worker/task/createdForStudents" class="nav-link text-white">
+                            <svg class="bi pe-none nav-icon" width="16" height="16">
+                                <use xlink:href="/worker/task/newForStudent"></use>
+                            </svg>
+                            <span class="nav-text">Просмотр созданных задач для студентов</span>
+                        </a>
+                    </li>
                 </ul>
                 <hr style="background-color: white;">
                 <br>
@@ -44,7 +60,7 @@
                     <div class="dropdown">
                         <img src="/images/student.png" alt=" " width="32" height="32" class="rounded-circle avatar">
                         <strong class="username" style="margin-left: 10px;" th:text="${worker.getName()}">Admin</strong>
-                        <form th:action="@{/logout}" th:method="POST" style="margin-left: 70px;">
+                        <form th:action="@{/logout}" th:method="POST" style="margin-left: 50px;">
                             <button class="btn btn-primary" type="submit">Выйти</button>
                         </form>
                     </div>
@@ -56,13 +72,26 @@
         <div class="col-md order-md-2">
             <div class="album py-5 bg-body-tertiary">
                 <div class="container">
-                    <form action="/worker/main" method="get" class="mb-3">
+                    <div class="d-flex justify-content-end mb-3">
+                        <a href="/worker/completed" class="btn btn-sm btn-outline-primary">Завершенные</a>
+                    </div>
+                    <form action="/worker/main" method="get" class="mb-3" id="filterForm">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <label for="title" class="form-label visually-hidden">Поиск по названию задачи:</label>
                                     <input type="text" class="form-control" id="title" name="title">
-                                    <button type="submit" class="btn btn-primary">Поиск</button>
+                                    <button type="submit" class="btn btn-primary" onclick="performSearch()">Поиск</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <select class="form-select" id="interests" name="interests">
+                                        <option value="">Все</option>
+                                        <option value="IMPORTANT">Важные</option>
+                                        <option value="MEDIUM">Средние</option>
+                                        <option value="UNIMPORTANT">Неважные</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -74,35 +103,88 @@
                             <a th:href="@{/worker/main}" class="btn btn-primary">Вернуться к списку задач</a>
                         </div>
                         <!-- Если задачи найдены -->
-                        <div th:each="task : ${tasks}" class="col">
+                        <div th:each="task : ${tasks}" class="col" th:if="${task.getTaskStatuses().contains(T(diploma.trackingApp.models.TaskStatus).IN_PROGRESS)}">
                             <form>
                                 <div class="card shadow-sm">
-                                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                         xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                         preserveAspectRatio="xMidYMid slice" focusable="false">
+                                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
                                         <title>Placeholder</title>
-                                        <rect width="100%" height="100%" fill="#55595c"></rect>
-                                        <text x="50%" y="50%" fill="#eceeef" dy=".3em" th:text="${task.getTitle()}"></text>
+                                        <rect width="100%" height="100%" th:classappend="${task.getColorOfTask()} == 'green' ? 'green' : (${task.getColorOfTask()} == 'yellow' ? 'yellow' : 'default')" />
+                                        <text x="50%" y="50%" fill="#4f4f4f" dy=".3em" class="text-inside-rectangle">
+                                            <tspan x="50%" dy="1.2em" th:text="${task.getTitle()}" style="font-size: 24px; font-weight: bold;" />
+                                        </text>
                                     </svg>
                                     <div class="card-body">
-                                        <p class="card-text" th:text="${task.getFullText()}"></p>
+                                        <div class="d-flex align-items-start">
+                                            <svg width="30" height="30">
+                                                <circle cx="15" cy="12" r="6"
+                                                        th:switch="${task.getInterests().contains(T(diploma.trackingApp.models.Interest).IMPORTANT)}"
+                                                        th:style="${'fill: ' + (task.getInterests().contains(T(diploma.trackingApp.models.Interest).IMPORTANT) ? 'red' : (task.getInterests().contains(T(diploma.trackingApp.models.Interest).MEDIUM) ? 'orange' : 'green'))}">
+                                                </circle>
+                                            </svg>
+                                            <p class="card-text ml-2" th:text="${task.getFullText().length() > 35 ? task.getFullText().substring(0, 35) + '...' : task.getFullText()}"></p>
+                                        </div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
-                                                <a th:href="@{task/{id}(id=${task.getId()})}"
-                                                   class="btn btn-sm btn-outline-secondary">Просмотреть</a>
+                                                <a th:href="@{task/{id}(id=${task.getId()})}" class="btn btn-sm btn-outline-secondary">Просмотреть</a>
+                                                <a th:if="${task.creator != 'Администрация' && task.creator.id == worker.id}" th:href="@{task/{id}/edit(id=${task.getId()})}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
                                             </div>
-                                            <small class="text-body-secondary"
-                                                   th:text="${#dates.format(task.getEndTask(), 'dd.MM.yyyy')}"></small>
+                                            <small class="text-body-secondary" th:text="${#dates.format(task.getEndTask(), 'dd.MM.yyyy')}"></small>
+                                        </div>
+                                        <br>
+                                        <div>
+                                            <small class="text-body-secondary"><span th:text="${task.getCreator()}"></span></small>
                                         </div>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Функция для выполнения поиска
+    function performSearch(event) {
+        event.preventDefault();
+        var searchInput = document.getElementById('title').value;
+        if (searchInput.trim() !== '') {
+            var form = document.getElementById('filterForm');
+            form.action = '/admin/main';
+            form.submit();
+        }
+    }
+    // Обработчик события при нажатии на кнопку "Поиск"
+    var searchButton = document.querySelector('button[type="submit"]');
+    searchButton.addEventListener('click', performSearch);
+
+    // Функция для сохранения выбранного значения важности
+    function saveInterest() {
+        var interestsSelect = document.getElementById('interests');
+        localStorage.setItem('selectedInterest', interestsSelect.value);
+    }
+
+    // Обработчик события при изменении значения важности
+    var interestsSelect = document.getElementById('interests');
+    interestsSelect.addEventListener('change', function() {
+        if (this.value === '') {
+            window.location.href = 'http://localhost:8080/worker/main';
+        } else {
+            var form = document.getElementById('filterForm');
+            form.action = '/worker/main';
+            form.submit();
+        }
+        saveInterest();
+    });
+
+    // Загрузка сохраненного значения важности при загрузке страницы
+    var savedInterest = localStorage.getItem('selectedInterest');
+    if (savedInterest) {
+        interestsSelect.value = savedInterest;
+    }
+</script>
 </body>
 </html>

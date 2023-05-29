@@ -1,5 +1,7 @@
 package diploma.trackingApp.models;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
@@ -14,6 +16,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@JsonAutoDetect
 @Entity
 @Table(name = "Worker")
 public class Worker {

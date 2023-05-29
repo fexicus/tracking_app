@@ -90,3 +90,16 @@ body {
 .bd-mode-toggle {
     z-index: 1500;
 }
+
+rect.green {
+    fill: #EEE8AA;
+
+}
+
+rect.yellow {
+    fill: #77DD77;
+}
+
+rect.default {
+    fill: #808080;
+}

@@ -66,5 +66,16 @@ public class WorkerService {
         workerRepository.save(worker);
     }
 
+    @Transactional
+    public List<Worker> getWorkerByDepartment(String department){
+        return workerRepository.getWorkerByDepartment(department);
+    }
+    public List<String> findAllDepartment() {
+        return workerRepository.findAllDepartment();
+    }
+    public List<Worker> findByDepartment(String department) {
+        return workerRepository.findByDepartment(department);
+    }
+
 
 }

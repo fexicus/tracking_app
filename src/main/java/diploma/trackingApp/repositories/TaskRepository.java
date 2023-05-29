@@ -11,12 +11,8 @@ import java.util.List;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer> {
-    List<Task> findByStudentsId(int id);
-
-    List<Task> findByWorkersId(int id);
 
     List<Task> findByTitle(String title);
-
 
     List<Task> findByTitleContainingAndInterests(String title, Interest importance);
 

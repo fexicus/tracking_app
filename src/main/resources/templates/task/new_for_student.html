@@ -63,7 +63,7 @@
                             <svg class="bi pe-none nav-icon" width="16" height="16">
                                 <use xlink:href="/admin/task/newForWorker"></use>
                             </svg>
-                            <span class="nav-text">Создать задачу работникам</span>
+                            <span class="nav-text">Создать задачу преподавателям</span>
                         </a>
                     </li>
                 </ul>
@@ -92,7 +92,7 @@
                             <select id="student" name="student" class="form-control">
                                 <option th:selected="${studentId == 0}" value="0">Выберите студента</option>
                                 <th:block th:each="student : ${students}">
-                                    <option th:value="${student.id}" th:text="${student.name}" th:selected="${studentId == student.id}"></option>
+                                    <option th:value="${student.id}" th:text="${student.surname + ' ' + student.name + ' ' + student.patronymic}" th:selected="${studentId == student.id}"></option>
                                 </th:block>
                             </select>
                         </div>
